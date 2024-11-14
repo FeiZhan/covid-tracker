@@ -2,11 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import CovidChart from './CovidChart';
 
-interface CovidDataDisplayProps {
-  filters: { country: string; startDate: string; endDate: string; chartType: string; };
-}
+type DataDisplayProps = {
+  filters: {
+    country: string;
+    startDate: string;
+    endDate: string;
+    chartType: string;
+  };
+};
 
-const CovidDataDisplay: React.FC<CovidDataDisplayProps> = ({ filters }) => {
+export const CovidDataDisplay: React.FC<DataDisplayProps> = ({ filters }) => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -38,11 +43,7 @@ const CovidDataDisplay: React.FC<CovidDataDisplayProps> = ({ filters }) => {
           </div>
           <div className="chart-placeholder">
             <h2>Data for {filters.country}</h2>
-            {filters.chartType === 'line' && <div>Line Chart Placeholder</div>}
-            {filters.chartType === 'bar' && <div>Bar Chart Placeholder</div>}
-            {filters.chartType === 'pie' && <div>Pie Chart Placeholder</div>}
-            {/* Replace placeholders with actual chart components */}
-            <CovidChart data={data} />
+            <CovidChart data={data} chartType={filters.chartType} />
           </div>
         </>
       )}
