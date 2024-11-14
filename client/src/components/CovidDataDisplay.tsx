@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import CovidChart from './CovidChart';
 
 interface CovidDataDisplayProps {
-  filters: { country: string; startDate: string; endDate: string };
+  filters: { country: string; startDate: string; endDate: string; chartType: string; };
 }
 
 const CovidDataDisplay: React.FC<CovidDataDisplayProps> = ({ filters }) => {
@@ -37,6 +37,11 @@ const CovidDataDisplay: React.FC<CovidDataDisplayProps> = ({ filters }) => {
             <div className="card">Total Deaths: {data[0]?.total_deaths || 0}</div>
           </div>
           <div className="chart-placeholder">
+            <h2>Data for {filters.country}</h2>
+            {filters.chartType === 'line' && <div>Line Chart Placeholder</div>}
+            {filters.chartType === 'bar' && <div>Bar Chart Placeholder</div>}
+            {filters.chartType === 'pie' && <div>Pie Chart Placeholder</div>}
+            {/* Replace placeholders with actual chart components */}
             <CovidChart data={data} />
           </div>
         </>
