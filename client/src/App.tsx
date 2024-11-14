@@ -1,6 +1,7 @@
 // App.tsx
 import React, { useState } from 'react';
 import CovidFilterForm from './components/CovidFilterForm';
+import CovidDataDisplay from './components/CovidDataDisplay';
 import './App.css';
 
 const App: React.FC = () => {
@@ -14,6 +15,7 @@ const App: React.FC = () => {
     <div className="App">
       <h1>Covid Tracking and Comparison</h1>
       <CovidFilterForm onFilterSubmit={setFilters} />
+      <CovidDataDisplay filters={filters} />
     </div>
   );
 };
