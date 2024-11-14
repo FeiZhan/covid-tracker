@@ -1,14 +1,14 @@
+// src/App.tsx
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import CovidDataFetcher from './CovidDataFetcher';
+import CovidFilterForm from './CovidFilterForm';
 
-function App() {
+const App: React.FC = () => {
   return (
     <div className="App">
-      <CovidDataFetcher />
+      <CovidFilterForm />
     </div>
   );
-}
+};
 
 export default App;
