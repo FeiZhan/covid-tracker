@@ -1,5 +1,6 @@
 // components/CovidDataDisplay.tsx
 import React, { useEffect, useState } from 'react';
+import CovidChart from './CovidChart';
 
 interface CovidDataDisplayProps {
   filters: { country: string; startDate: string; endDate: string };
@@ -36,7 +37,7 @@ const CovidDataDisplay: React.FC<CovidDataDisplayProps> = ({ filters }) => {
             <div className="card">Total Deaths: {data[0]?.total_deaths || 0}</div>
           </div>
           <div className="chart-placeholder">
-            <p>Chart placeholder - Graph will display here</p>
+            <CovidChart data={data} />
           </div>
         </>
       )}
