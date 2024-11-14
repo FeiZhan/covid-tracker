@@ -1,12 +1,19 @@
-// src/App.tsx
-import React from 'react';
+// App.tsx
+import React, { useState } from 'react';
+import CovidFilterForm from './components/CovidFilterForm';
 import './App.css';
-import CovidDataFetcher from './components/CovidDataFetcher';
 
 const App: React.FC = () => {
+  const [filters, setFilters] = useState<{ country: string; startDate: string; endDate: string }>({
+    country: '',
+    startDate: '',
+    endDate: '',
+  });
+
   return (
     <div className="App">
-      <CovidDataFetcher />
+      <h1>Covid Tracking and Comparison</h1>
+      <CovidFilterForm onFilterSubmit={setFilters} />
     </div>
   );
 };

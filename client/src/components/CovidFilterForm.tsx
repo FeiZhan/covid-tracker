@@ -1,54 +1,53 @@
-// src/components/CovidFilterForm.tsx
+// components/CovidFilterForm.tsx
 import React, { useState } from 'react';
+import { TextField, Button, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 
-interface CovidFilterFormProps {
-  onSubmit: (country: string, startDate: string, endDate: string) => void;
+interface FilterProps {
+  onFilterSubmit: (filters: { country: string; startDate: string; endDate: string }) => void;
 }
 
-const CovidFilterForm: React.FC<CovidFilterFormProps> = ({ onSubmit }) => {
-  const [country, setCountry] = useState<string>('');
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+const CovidFilterForm: React.FC<FilterProps> = ({ onFilterSubmit }) => {
+  const [country, setCountry] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (country && startDate && endDate) {
-      onSubmit(country, startDate, endDate);
-    }
+  const handleSubmit = () => {
+    onFilterSubmit({ country, startDate, endDate });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Country:</label>
-        <input
-          type="text"
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-          placeholder="Enter country"
-          required
-        />
-      </div>
-      <div>
-        <label>Start Date:</label>
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>End Date:</label>
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          required
-        />
-      </div>
-      <button type="submit">Fetch Data</button>
-    </form>
+    <div className="filter-form">
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Country</InputLabel>
+        <Select value={country} onChange={(e) => setCountry(e.target.value as string)}>
+          <MenuItem value="Afghanistan">Afghanistan</MenuItem>
+          <MenuItem value="USA">USA</MenuItem>
+          <MenuItem value="India">India</MenuItem>
+          {/* Add more countries as needed */}
+        </Select>
+      </FormControl>
+      <TextField
+        label="Start Date"
+        type="date"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+        fullWidth
+        InputLabelProps={{ shrink: true }}
+        margin="normal"
+      />
+      <TextField
+        label="End Date"
+        type="date"
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
+        fullWidth
+        InputLabelProps={{ shrink: true }}
+        margin="normal"
+      />
+      <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
+        Search
+      </Button>
+    </div>
   );
 };
 

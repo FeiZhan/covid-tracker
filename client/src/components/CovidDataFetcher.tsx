@@ -44,7 +44,7 @@ const CovidDataFetcher: React.FC = () => {
 
   return (
     <div>
-      <CovidFilterForm onSubmit={handleFilterSubmit} />
+      <CovidFilterForm onFilterSubmit={() => {}} />
 
       {loading && <div>Loading...</div>}
       {error && <div>{error}</div>}
