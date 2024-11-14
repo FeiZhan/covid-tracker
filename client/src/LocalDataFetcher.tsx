@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CovidData, CovidCountryData } from './types/CovidData'; // Import types
 
-const CovidDataFetcher: React.FC = () => {
+const LocalDataFetcher: React.FC = () => {
   const [covidData, setCovidData] = useState<CovidData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,4 +59,4 @@ const CovidDataFetcher: React.FC = () => {
   );
 };
 
-export default CovidDataFetcher;
+export default LocalDataFetcher;
