@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DataChart from './DataChart';
-import WorldMap from './CovidWorldMap';
+import WorldMap from './WorldMap';
 import ChartType from '../types/ChartType';
 import DataType from '../types/DataType';
 import FilterType from '../types/FilterType';
