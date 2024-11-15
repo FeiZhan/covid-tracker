@@ -1,12 +1,11 @@
 // App.tsx
 import React, { useState } from 'react';
-import CovidFilterForm from './components/CovidFilterForm';
+import FilterPanel from './components/FilterPanel';
 import CovidDataDisplay from './components/CovidDataDisplay';
 import './App.css';
 import { ChartType } from './types/ChartTypes';
 
 const App: React.FC = () => {
-  // State for the two sets of filters
   const [baselineFilters, setBaselineFilters] = useState<{
     country: string;
     startDate: string;
@@ -21,14 +20,13 @@ const App: React.FC = () => {
     selectedColumn: 'total_cases',
   });
 
-  // State for the optional comparisonFilters
   const [comparisonFilters, setComparisonFilters] = useState<{
     country: string;
     startDate: string;
     endDate: string;
     chartType: ChartType;
     selectedColumn: string;
-  } | undefined>(undefined); // comparisonFilters can be undefined
+  } | undefined>(undefined);
 
   const columns = [
     'total_cases',
@@ -38,23 +36,44 @@ const App: React.FC = () => {
     // Add more columns as needed
   ];
 
+  const handleBaselineFilterChange = (filters: {
+    country: string;
+    startDate: string;
+    endDate: string;
+    chartType: ChartType;
+    selectedColumn: string;
+  }) => {
+    setBaselineFilters(filters);
+  };
+
+  const handleComparisonFilterChange = (filters: {
+    country: string;
+    startDate: string;
+    endDate: string;
+    chartType: ChartType;
+    selectedColumn: string;
+  }) => {
+    setComparisonFilters(filters);
+  };
+
+  const handleSearch = (chartType: ChartType) => {
+    // This is where you handle the search logic,
+    // which could include triggering updates for data visualization with the chart type applied
+    console.log('Search triggered with chart type:', chartType);
+  };
+
   return (
     <div className="App">
       <h1>COVID-19 Data Tracker</h1>
-      <h2>Baseline Data</h2>
-      <CovidFilterForm
-        filters={baselineFilters}
+      <FilterPanel
+        baselineFilters={baselineFilters}
+        comparisonFilters={comparisonFilters}
         columns={columns}
-        onFilterSubmit={setBaselineFilters} // Update baseline filters
+        onBaselineFilterChange={handleBaselineFilterChange}
+        onComparisonFilterChange={handleComparisonFilterChange}
+        onSearch={handleSearch}
       />
-      
-      <h2>Comparison Data (Optional)</h2>
-      <CovidFilterForm
-        filters={comparisonFilters || baselineFilters} // Default to baseline filters if comparison is undefined
-        columns={columns}
-        onFilterSubmit={setComparisonFilters} // Update comparison filters
-      />
-      
+
       <CovidDataDisplay baselineFilters={baselineFilters} comparisonFilters={comparisonFilters} />
     </div>
   );
