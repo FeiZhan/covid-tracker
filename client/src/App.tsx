@@ -75,6 +75,7 @@ const App: React.FC = () => {
 
       <CovidDataDisplay
         baselineFilters={baselineFilters}
+        setBaselineFilters={setBaselineFilters}
         comparisonFilters={comparisonFilters}
         chartType={chartType} // Pass down the selected chartType
         selectedColumn={selectedColumn} // Pass the selected column to the display component

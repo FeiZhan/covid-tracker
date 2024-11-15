@@ -1,5 +1,4 @@
-// components/CovidFilterForm.tsx
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { TextField, MenuItem, Select, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
 
 type FilterProps = {
@@ -19,6 +18,13 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => 
   const [country, setCountry] = useState(filters.country);
   const [startDate, setStartDate] = useState(filters.startDate);
   const [endDate, setEndDate] = useState(filters.endDate);
+
+  // Sync state with incoming props when filters change
+  useEffect(() => {
+    setCountry(filters.country);
+    setStartDate(filters.startDate);
+    setEndDate(filters.endDate);
+  }, [filters]);
 
   const handleSubmit = () => {
     onFilterSubmit({ country, startDate, endDate });

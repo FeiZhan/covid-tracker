@@ -10,6 +10,7 @@ type DataDisplayProps = {
     startDate: string;
     endDate: string;
   };
+  setBaselineFilters: React.Dispatch<React.SetStateAction<{ country: string; startDate: string; endDate: string }>>; // Add setter for baseline filters
   comparisonFilters?: {
     country: string;
     startDate: string;
@@ -21,6 +22,7 @@ type DataDisplayProps = {
 
 export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
   baselineFilters,
+  setBaselineFilters, // Access setter for baseline filters
   comparisonFilters,
   chartType, // Access the chartType prop here
   selectedColumn, // Access the selectedColumn prop
@@ -65,6 +67,11 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
     }
   }, [comparisonFilters]);
 
+  // Handler to update the baseline country filter
+  const handleCountrySelect = (countryName: string) => {
+    setBaselineFilters((prevFilters) => ({ ...prevFilters, country: countryName }));
+  };
+
   return (
     <div className="data-display">
       {loading && <p>Loading data...</p>}
@@ -80,7 +87,11 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
             <h2>Data for {baselineFilters.country}</h2>
             {/* Render WorldMap if chartType is 'world_map' */}
             {chartType === ChartType.MAP ? (
-              <WorldMap endDate={baselineFilters.endDate} column={selectedColumn} />
+              <WorldMap
+                endDate={baselineFilters.endDate}
+                column={selectedColumn}
+                onCountrySelect={handleCountrySelect} // Pass handler to WorldMap
+              />
             ) : (
               <CovidChart
                 data1={data1}

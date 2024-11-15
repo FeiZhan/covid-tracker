@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
 import { Tooltip, Typography } from '@mui/material';
-import { DataItem } from '../types/DataItem'; // Import types
+import { DataItem } from '../types/DataItem';
 
-// Define color scale for cases
 const colorScale = scaleLinear<string>()
   .domain([0, 1000000, 10000000]) // Adjust based on your dataset
   .range(["#e0f7fa", "#26c6da", "#01579b"]);
@@ -15,25 +14,23 @@ const geoUrl =
 interface CovidWorldMapProps {
   column: string; // The column parameter is used instead of country
   endDate: string; // The endDate parameter is now required
+  onCountrySelect: (countryName: string) => void; // Callback to update the filter
 }
 
-const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ column, endDate }) => {
+const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ column, endDate, onCountrySelect }) => {
   const [countryData, setCountryData] = useState<{ [key: string]: number }>({});
   const [tooltipContent, setTooltipContent] = useState("");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [loading, setLoading] = useState(false);
 
-  // Fetch data based on the column and endDate
   useEffect(() => {
     if (column && endDate) {
       setLoading(true);
-      // Fetch data for all countries, based on the column and endDate
       fetch(`http://localhost:5000/api/covid?column=${column}&endDate=${endDate}`)
         .then((response) => response.json())
         .then((data: DataItem[]) => {
           const dataMap: { [key: string]: number } = {};
           data.forEach((item) => {
-            // Map iso_code to the value of the specified column (cases, deaths, etc.)
             dataMap[item.iso_code] = parseInt(item[column]);
           });
           setCountryData(dataMap);
@@ -50,6 +47,10 @@ const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ column, endDate }) => {
 
   const handleMouseLeave = () => {
     setTooltipContent(""); // Clear tooltip content
+  };
+
+  const handleCountryClick = (countryName: string) => {
+    onCountrySelect(countryName); // Update filter with selected country name
   };
 
   return (
@@ -73,6 +74,7 @@ const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ column, endDate }) => {
                       handleMouseEnter(event, { iso_code: isoCode, [column]: value, location: geo.properties.name })
                     }
                     onMouseLeave={handleMouseLeave}
+                    onClick={() => handleCountryClick(geo.properties.name)} // Drill-down with filter update
                     style={{
                       default: { outline: 'none' },
                       hover: { fill: '#FF5722', outline: 'none' },
