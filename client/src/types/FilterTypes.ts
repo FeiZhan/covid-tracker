@@ -1,4 +1,4 @@
-import { ChartType } from './ChartTypes';
+import ChartType from './ChartType';
 
 export const columns = [
     'total_cases',

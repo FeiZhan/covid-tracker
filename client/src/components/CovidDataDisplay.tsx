@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CovidChart from './CovidChart';
 import WorldMap from './CovidWorldMap'; // Import the WorldMap component
-import { ChartType } from '../types/ChartTypes';
+import ChartType from '../types/ChartType';
 import { DataItem } from '../types/DataItem'; // Import the DataItem type
 import { Filter } from '../types/FilterTypes'; // Import the Filter type
 

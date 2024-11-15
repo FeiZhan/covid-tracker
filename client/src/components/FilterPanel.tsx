@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CovidFilterForm from './CovidFilterForm';
-import { ChartType } from '../types/ChartTypes';
+import ChartType from '../types/ChartType';
 import { Filter, columns } from '../types/FilterTypes'; // Import FilterTypes
 
 type FilterPanelProps = {
@@ -84,12 +84,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         <label>
           Chart Type:
           <select value={filters.chartType} onChange={handleChartTypeChange}>
-            <option value={ChartType.LINE}>Line</option>
-            <option value={ChartType.BAR}>Bar</option>
-            <option value={ChartType.PIE}>Pie</option>
-            <option value={ChartType.AREA}>Area</option>
-            <option value={ChartType.RADAR}>Radar</option>
-            <option value={ChartType.MAP}>Map</option>
+            <option value={ChartType.LINE}>{ChartType.LINE}</option>
+            <option value={ChartType.BAR}>{ChartType.BAR}</option>
+            <option value={ChartType.MAP}>{ChartType.MAP}</option>
           </select>
         </label>
       </div>

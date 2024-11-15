@@ -4,7 +4,7 @@ import {
 } from 'recharts';
 import { DataItem } from '../types/DataItem'; // Import types
 import CovidWorldMap from './CovidWorldMap';
-import { ChartType } from '../types/ChartTypes';
+import ChartType from '../types/ChartType';
 
 type CovidChartProps = {
   data1: DataItem[]; // First dataset (can be used for comparison)
