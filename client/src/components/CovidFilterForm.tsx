@@ -1,19 +1,20 @@
 // components/CovidFilterForm.tsx
 import React, { useState, ChangeEvent } from 'react';
 import { TextField, Button, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { ChartType } from '../types/ChartTypes';
 
 type FilterProps = {
   filters: {
     country: string;
     startDate: string;
     endDate: string;
-    chartType: string;
+    chartType: ChartType;
   };
   onFilterSubmit: (newFilters: {
     country: string;
     startDate: string;
     endDate: string;
-    chartType: string;
+    chartType: ChartType;
   }) => void;
 };
 
@@ -22,7 +23,7 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => 
   const [startDate, setStartDate] = useState(filters.startDate);
   const [endDate, setEndDate] = useState(filters.endDate);
   const [chartType, setChartType] = useState(filters.chartType);
-  const handleChartTypeChange = (event: ChangeEvent<HTMLSelectElement>) => setChartType(event.target.value);
+  const handleChartTypeChange = (event: ChangeEvent<HTMLSelectElement>) => setChartType(event.target.value as ChartType);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -61,10 +62,12 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => 
       <label>
         Chart Type:
         <select value={chartType} onChange={handleChartTypeChange}>
-          <option value="line">Line Chart</option>
-          <option value="bar">Bar Chart</option>
-          <option value="pie">Pie Chart</option>
-          {/* Add other chart types as needed */}
+          <option value={ChartType.LINE}>{ChartType.LINE}</option>
+          <option value={ChartType.BAR}>{ChartType.BAR}</option>
+          <option value={ChartType.PIE}>{ChartType.PIE}</option>
+          <option value={ChartType.AREA}>{ChartType.AREA}</option>
+          <option value={ChartType.RADAR}>{ChartType.RADAR}</option>
+          <option value={ChartType.MAP}>{ChartType.MAP}</option>
         </select>
       </label>
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>

@@ -4,15 +4,16 @@ import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import { CovidData, CovidCountryData } from '../types/CovidData'; // Import types
+import { ChartType } from '../types/ChartTypes';
 
 type CovidChartProps = {
   data: CovidData[];
-  chartType: string;
+  chartType: ChartType;
 };
 
 const CovidChart: React.FC<CovidChartProps> = ({ data, chartType }) => {
   switch (chartType) {
-    case 'line':
+    case ChartType.LINE:
       return (
         <ResponsiveContainer width="100%" height={400}>
           <LineChart data={data}>
@@ -25,7 +26,7 @@ const CovidChart: React.FC<CovidChartProps> = ({ data, chartType }) => {
           </LineChart>
         </ResponsiveContainer>
       );
-    case 'bar':
+    case ChartType.BAR:
       return (
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={data}>

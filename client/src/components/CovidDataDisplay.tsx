@@ -1,13 +1,14 @@
 // components/CovidDataDisplay.tsx
 import React, { useEffect, useState } from 'react';
 import CovidChart from './CovidChart';
+import { ChartType } from '../types/ChartTypes';
 
 type DataDisplayProps = {
   filters: {
     country: string;
     startDate: string;
     endDate: string;
-    chartType: string;
+    chartType: ChartType;
   };
 };
 
