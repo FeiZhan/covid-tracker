@@ -9,25 +9,31 @@ type FilterProps = {
     startDate: string;
     endDate: string;
     chartType: ChartType;
+    selectedColumn: string;
   };
+  columns: string[]; // New prop for available columns
   onFilterSubmit: (newFilters: {
     country: string;
     startDate: string;
     endDate: string;
     chartType: ChartType;
+    selectedColumn: string;
   }) => void;
 };
 
-const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
+const CovidFilterForm: React.FC<FilterProps> = ({ filters, columns, onFilterSubmit }) => {
   const [country, setCountry] = useState(filters.country);
   const [startDate, setStartDate] = useState(filters.startDate);
   const [endDate, setEndDate] = useState(filters.endDate);
   const [chartType, setChartType] = useState(filters.chartType);
-  const handleChartTypeChange = (event: ChangeEvent<HTMLSelectElement>) => setChartType(event.target.value as ChartType);
+  const [selectedColumn, setSelectedColumn] = useState(filters.selectedColumn);
+
+  const handleChartTypeChange = (event: ChangeEvent<{ value: unknown }>) =>
+    setChartType(event.target.value as ChartType);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    onFilterSubmit({ country, startDate, endDate, chartType });
+    onFilterSubmit({ country, startDate, endDate, chartType, selectedColumn });
   };
 
   return (
@@ -41,6 +47,7 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => 
           {/* Add more countries as needed */}
         </Select>
       </FormControl>
+      
       <TextField
         label="Start Date"
         type="date"
@@ -50,6 +57,7 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => 
         InputLabelProps={{ shrink: true }}
         margin="normal"
       />
+      
       <TextField
         label="End Date"
         type="date"
@@ -70,6 +78,18 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => 
           <option value={ChartType.MAP}>{ChartType.MAP}</option>
         </select>
       </label>
+
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Data Column</InputLabel>
+        <Select value={selectedColumn} onChange={(e) => setSelectedColumn(e.target.value as string)}>
+          {columns.map((column) => (
+            <MenuItem key={column} value={column}>
+              {column.replace(/_/g, ' ')} {/* Format column names if needed */}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
         Search
       </Button>
