@@ -2,29 +2,32 @@ import React from 'react';
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
-import DataType from '../types/DataType'; // Import types
+import DataType from '../types/DataType';
 import ChartType from '../types/ChartType';
 
-type CovidChartProps = {
-  data1: DataType[]; // First dataset (can be used for comparison)
-  data2?: DataType[]; // Second dataset (optional for comparison)
+type DataChartProps = {
+  data1: DataType[];
+  data2?: DataType[];
   chartType: ChartType;
-  selectedColumn: string; // Data column to display
+  selectedColumn: string;
 };
 
-const DataChart: React.FC<CovidChartProps> = ({ data1, data2, chartType, selectedColumn }) => {
-  const isComparison = data2 && data2.length > 0; // Check if comparison data is provided
+const DataChart: React.FC<DataChartProps> = ({ data1, data2, chartType, selectedColumn }) => {
+  if (!data1 || data1.length === 0) {
+    return <div>No data available for selected filters.</div>;
+  }
 
-  // Map data1 and data2 into the format expected by the Bar and Line chart components
+  const isComparison = data2 && data2.length > 0;
+
   const transformData = (data: DataType[]) => {
     return data.map(item => ({
-      name: item.date, // Assuming 'date' is the date field, change this as per your data
-      value: parseFloat(item[selectedColumn]), // Ensure value is a number
+      name: item.date,
+      value: isNaN(parseFloat(item[selectedColumn])) ? 0 : parseFloat(item[selectedColumn]),
     }));
   };
 
   const chartData1 = transformData(data1);
-  const chartData2 = data2 && data2.length ? transformData(data2) : [];
+  const chartData2 = data2 ? transformData(data2) : [];
 
   switch (chartType) {
     case ChartType.LINE:
@@ -73,7 +76,7 @@ const DataChart: React.FC<CovidChartProps> = ({ data1, data2, chartType, selecte
         </ResponsiveContainer>
       );
     default:
-      return <div>Select a chart type to display the data.</div>;
+      return <div>Invalid chart type selected. Please choose a valid chart type.</div>;
   }
 };
 
