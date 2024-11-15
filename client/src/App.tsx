@@ -6,17 +6,16 @@ import './App.css';
 import { ChartType } from './types/ChartTypes';
 
 const App: React.FC = () => {
+  // Remove chartType from the filters; manage it separately
   const [baselineFilters, setBaselineFilters] = useState<{
     country: string;
     startDate: string;
     endDate: string;
-    chartType: ChartType;
     selectedColumn: string;
   }>({
     country: 'Afghanistan',
     startDate: '2020-01-01',
     endDate: '2020-12-31',
-    chartType: ChartType.LINE,  // Default chart type for baseline
     selectedColumn: 'total_cases',
   });
 
@@ -24,9 +23,10 @@ const App: React.FC = () => {
     country: string;
     startDate: string;
     endDate: string;
-    chartType: ChartType;
     selectedColumn: string;
   } | undefined>(undefined);
+
+  const [chartType, setChartType] = useState<ChartType>(ChartType.LINE); // Global chartType
 
   const columns = [
     'total_cases',
@@ -40,7 +40,6 @@ const App: React.FC = () => {
     country: string;
     startDate: string;
     endDate: string;
-    chartType: ChartType;
     selectedColumn: string;
   }) => {
     setBaselineFilters(filters);
@@ -50,20 +49,15 @@ const App: React.FC = () => {
     country: string;
     startDate: string;
     endDate: string;
-    chartType: ChartType;
     selectedColumn: string;
   }) => {
     setComparisonFilters(filters);
   };
 
-  const handleSearch = (chartType: ChartType) => {
-    // Here we handle the search logic that triggers updates for data visualization.
-    // Update the chartType for the baseline and/or comparison filters
-    setBaselineFilters(prevFilters => ({
-      ...prevFilters,
-      chartType,  // Update chartType in baseline filters
-    }));
-    console.log('Search triggered with chart type:', chartType);
+  const handleSearch = (newChartType: ChartType) => {
+    // Update the global chartType
+    setChartType(newChartType);
+    console.log('Search triggered with chart type:', newChartType);
   };
 
   return (
@@ -76,12 +70,14 @@ const App: React.FC = () => {
         onBaselineFilterChange={handleBaselineFilterChange}
         onComparisonFilterChange={handleComparisonFilterChange}
         onSearch={handleSearch}
+        chartType={chartType} // Pass chartType to FilterPanel
+        setChartType={setChartType} // Pass setChartType to modify it from FilterPanel
       />
 
       <CovidDataDisplay
         baselineFilters={baselineFilters}
         comparisonFilters={comparisonFilters}
-        chartType={baselineFilters.chartType}  // Pass chartType to CovidDataDisplay
+        chartType={chartType}  // Pass chartType to CovidDataDisplay
       />
     </div>
   );
