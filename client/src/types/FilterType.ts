@@ -1,12 +1,14 @@
 import ChartType from './ChartType';
 
-export const Columns = [
-  'total_cases',
-  'new_cases',
-  'total_deaths',
-  'new_deaths',
-];
+// Enum for Columns
+export enum ColumnType {
+  TOTAL_CASES = 'total_cases',
+  NEW_CASES = 'new_cases',
+  TOTAL_DEATHS = 'total_deaths',
+  NEW_DEATHS = 'new_deaths',
+}
 
+// BaseFilterType definition
 type BaseFilterType = {
   country: string;
   startDate: string;
@@ -17,10 +19,10 @@ type BaseFilterType = {
 type Filter = {
   baselineFilter: BaseFilterType;
   comparisonFilter: BaseFilterType;
-  chartType: ChartType;  // Example chart types
-  column: string;  // Column to display in the chart (e.g., 'cases', 'deaths')
+  chartType: ChartType;  // Chart type enum
+  column: ColumnType;  // Column enum instead of string
 };
-  
+
 // Example for default filter state
 export const defaultFilter: Filter = {
   baselineFilter: {
@@ -34,7 +36,7 @@ export const defaultFilter: Filter = {
     endDate: '2020-12-31',
   },
   chartType: ChartType.LINE,
-  column: Columns[0], // Example column
+  column: ColumnType.TOTAL_CASES, // Use enum value here
 };
 
 export default Filter;

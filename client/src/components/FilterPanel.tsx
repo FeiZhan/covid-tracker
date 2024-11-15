@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CovidFilterForm from './CovidFilterForm';
 import ChartType from '../types/ChartType';
-import FilterType, {Columns} from '../types/FilterType'; // Import FilterTypes
+import FilterType, { ColumnType } from '../types/FilterType'; // Import FilterTypes with Column enum
 
 type FilterPanelProps = {
   filters: FilterType; // Now using Filter type for filters
@@ -12,7 +12,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   filters,
   onFilterChange,
 }) => {
-  const [selectedColumn, setSelectedColumn] = useState<string>(filters.column); // Set initial state from filters
+  const [selectedColumn, setSelectedColumn] = useState<ColumnType>(filters.column); // Use Column enum for selectedColumn
 
   const handleChartTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const selectedChartType = event.target.value as ChartType;
@@ -23,7 +23,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   };
 
   const handleColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const column = event.target.value;
+    const column = event.target.value as ColumnType; // Ensure column is of type Column enum
     setSelectedColumn(column); // Update the selected column state
     onFilterChange({
       ...filters,
@@ -48,7 +48,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   return (
     <div>
       <h3>Filters</h3>
-      
+
       {/* Column Selection */}
       <div className="column-selection">
         <label>
@@ -57,9 +57,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             value={selectedColumn}
             onChange={handleColumnChange}
           >
-            {Columns.map((column) => (
+            {Object.values(ColumnType).map((column) => ( // Map over enum values
               <option key={column} value={column}>
-                {column}
+                {column} {/* Display enum value */}
               </option>
             ))}
           </select>
