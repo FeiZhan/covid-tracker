@@ -2,26 +2,21 @@ import React, { useState } from 'react';
 import FilterPanel from './components/FilterPanel';
 import CovidDataDisplay from './components/CovidDataDisplay';
 import './App.css';
-import FilterType, { defaultFilter } from './types/FilterType'; // Import Filter and defaultFilter
+import FilterType, { defaultFilter } from './types/FilterType';
 
 const App: React.FC = () => {
-  // Use the Filter type and initialize with defaultFilter
   const [filters, setFilters] = useState<FilterType>(defaultFilter);
 
   return (
     <div className="App">
       <h1>COVID-19 Data Tracker</h1>
-
-      {/* Pass entire filters object to FilterPanel */}
       <FilterPanel
-        filters={filters} // Passing the whole filter object
-        onFilterChange={setFilters} // Directly pass setFilters as it matches the expected type
+        filters={filters}
+        onFilterChange={setFilters}
       />
-
-      {/* Pass filters to CovidDataDisplay */}
       <CovidDataDisplay
-        filters={filters} // Pass filters to data display component
-        onFilterChange={setFilters} // Directly pass setFilters as it matches the expected type
+        filters={filters}
+        onFilterChange={setFilters}
       />
     </div>
   );
