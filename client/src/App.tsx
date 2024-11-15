@@ -10,22 +10,20 @@ const App: React.FC = () => {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string;
   }>({
     country: 'Afghanistan',
     startDate: '2020-01-01',
     endDate: '2020-12-31',
-    selectedColumn: 'total_cases',
   });
 
   const [comparisonFilters, setComparisonFilters] = useState<{
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string;
   } | undefined>(undefined);
 
   const [chartType, setChartType] = useState<ChartType>(ChartType.LINE);
+  const [selectedColumn, setSelectedColumn] = useState<string>('total_cases'); // Local state for selected column
 
   const columns = [
     'total_cases',
@@ -39,7 +37,6 @@ const App: React.FC = () => {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string;
   }) => {
     setBaselineFilters(filters);
   };
@@ -49,7 +46,6 @@ const App: React.FC = () => {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string;
   }) => {
     setComparisonFilters(filters);
   };
@@ -61,11 +57,7 @@ const App: React.FC = () => {
 
   // Function to handle column changes
   const handleColumnChange = (column: string) => {
-    // Update baseline filter column
-    setBaselineFilters((prevFilters) => ({
-      ...prevFilters,
-      selectedColumn: column,
-    }));
+    setSelectedColumn(column); // Update the selected column state
   };
 
   return (
@@ -85,6 +77,7 @@ const App: React.FC = () => {
         baselineFilters={baselineFilters}
         comparisonFilters={comparisonFilters}
         chartType={chartType} // Pass down the selected chartType
+        selectedColumn={selectedColumn} // Pass the selected column to the display component
       />
     </div>
   );

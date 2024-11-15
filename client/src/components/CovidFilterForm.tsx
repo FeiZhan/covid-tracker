@@ -7,25 +7,21 @@ type FilterProps = {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string;
   };
-  columns: string[];
   onFilterSubmit: (newFilters: {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string;
   }) => void;
 };
 
-const CovidFilterForm: React.FC<FilterProps> = ({ filters, columns, onFilterSubmit }) => {
+const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
   const [country, setCountry] = useState(filters.country);
   const [startDate, setStartDate] = useState(filters.startDate);
   const [endDate, setEndDate] = useState(filters.endDate);
-  const [selectedColumn, setSelectedColumn] = useState(filters.selectedColumn);
 
   const handleSubmit = () => {
-    onFilterSubmit({ country, startDate, endDate, selectedColumn });
+    onFilterSubmit({ country, startDate, endDate });
   };
 
   const handleCountryChange = (event: SelectChangeEvent<string>) => {
@@ -41,11 +37,6 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, columns, onFilterSubm
   const handleEndDateChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEndDate(event.target.value);
     handleSubmit(); // Update immediately when end date changes
-  };
-
-  const handleSelectedColumnChange = (event: SelectChangeEvent<string>) => {
-    setSelectedColumn(event.target.value);
-    handleSubmit(); // Update immediately when column changes
   };
 
   return (
@@ -78,15 +69,6 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, columns, onFilterSubm
         InputLabelProps={{ shrink: true }}
         margin="normal"
       />
-
-      <FormControl fullWidth margin="normal">
-        <InputLabel>Column</InputLabel>
-        <Select value={selectedColumn} onChange={handleSelectedColumnChange}>
-          {columns.map((column) => (
-            <MenuItem key={column} value={column}>{column}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
     </div>
   );
 };

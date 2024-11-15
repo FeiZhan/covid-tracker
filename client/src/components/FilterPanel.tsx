@@ -8,26 +8,22 @@ type FilterPanelProps = {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string;
   };
   comparisonFilters: {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string;
   } | undefined;
   columns: string[];
   onBaselineFilterChange: (filters: {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string;
   }) => void;
   onComparisonFilterChange: (filters: {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string;
   }) => void;
   onSearch: (chartType: ChartType) => void;
   onColumnChange: (column: string) => void; // New prop to handle column change
@@ -43,6 +39,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   onColumnChange, // Receive the column change handler
 }) => {
   const [chartType, setChartType] = useState<ChartType>(ChartType.LINE);
+  const [selectedColumn, setSelectedColumn] = useState<string>(''); // New state for selected column
 
   const handleChartTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const selectedChartType = event.target.value as ChartType;
@@ -52,7 +49,8 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   const handleColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const column = event.target.value;
-    onColumnChange(column); // Update the selected column for both filters
+    setSelectedColumn(column); // Update the selected column state
+    onColumnChange(column); // Pass the selected column to the parent component
   };
 
   return (
@@ -62,7 +60,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         <label>
           Select Column:
           <select
-            value={baselineFilters.selectedColumn}
+            value={selectedColumn}
             onChange={handleColumnChange} // Update the column on change
           >
             {columns.map((column) => (
@@ -76,16 +74,14 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
       {/* Baseline Filters */}
       <CovidFilterForm
-        filters={baselineFilters}
-        columns={columns}
+        filters={{ country: baselineFilters.country, startDate: baselineFilters.startDate, endDate: baselineFilters.endDate }}
         onFilterSubmit={onBaselineFilterChange}
       />
 
       <h3>Comparison Filters</h3>
       {/* Comparison Filters */}
       <CovidFilterForm
-        filters={comparisonFilters || { country: '', startDate: '', endDate: '', selectedColumn: '' }}
-        columns={columns}
+        filters={comparisonFilters || { country: '', startDate: '', endDate: '' }}
         onFilterSubmit={onComparisonFilterChange}
       />
 

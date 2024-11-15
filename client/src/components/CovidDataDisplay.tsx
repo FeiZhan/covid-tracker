@@ -8,21 +8,21 @@ type DataDisplayProps = {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string; // Column to display (e.g., new_cases, total_cases)
   };
   comparisonFilters?: {
     country: string;
     startDate: string;
     endDate: string;
-    selectedColumn: string; // Column to display (e.g., new_cases, total_cases)
   }; // This filter is optional
   chartType: ChartType; // New value for chart type passed as a prop
+  selectedColumn: string; // The selected column for displaying data
 };
 
 export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
   baselineFilters,
   comparisonFilters,
   chartType, // Access the chartType prop here
+  selectedColumn, // Access the selectedColumn prop
 }) => {
   const [data1, setData1] = useState<any[]>([]); // Data for the baseline (selected country)
   const [data2, setData2] = useState<any[]>([]); // Data for the comparison (optional)
@@ -82,7 +82,7 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
               data1={data1}
               data2={data2} // Pass comparison data (if available)
               chartType={chartType} // Pass the chartType directly from props
-              selectedColumn={baselineFilters.selectedColumn} // Column selected for display (e.g., total_cases)
+              selectedColumn={selectedColumn} // Column selected for display (e.g., total_cases)
             />
           </div>
         </>
