@@ -73,12 +73,6 @@ const CovidChart: React.FC<CovidChartProps> = ({ data1, data2, chartType, select
           </BarChart>
         </ResponsiveContainer>
       );
-    case ChartType.MAP:
-      return (
-        <CovidWorldMap
-          data={data1[data1.length - 1]}
-        />
-      );
     default:
       return <div>Select a chart type to display the data.</div>;
   }

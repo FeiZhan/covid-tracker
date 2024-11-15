@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
-import { Tooltip, Typography } from "@mui/material";
+import { Tooltip, Typography } from '@mui/material';
 import { DataItem } from '../types/DataItem'; // Import types
 
 // Define color scale for cases
@@ -12,66 +12,86 @@ const colorScale = scaleLinear<string>()
 const geoUrl =
   "https://raw.githubusercontent.com/subyfly/topojson/master/world-countries.json";
 
-
 interface CovidWorldMapProps {
-  data: DataItem;
+  column: string; // The column parameter is used instead of country
+  endDate: string; // The endDate parameter is now required
 }
 
-const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ data }) => {
+const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ column, endDate }) => {
   const [countryData, setCountryData] = useState<{ [key: string]: number }>({});
   const [tooltipContent, setTooltipContent] = useState("");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [loading, setLoading] = useState(false);
 
-  // Map dataset to a dictionary with iso_code as keys for quick lookups
+  // Fetch data based on the column and endDate
   useEffect(() => {
-    const dataMap: { [key: string]: number } = {};
-    dataMap[data.iso_code] = parseInt(data.total_cases);
-    setCountryData(dataMap);
-  }, [data]);
+    if (column && endDate) {
+      setLoading(true);
+      // Fetch data for all countries, based on the column and endDate
+      fetch(`http://localhost:5000/api/covid?column=${column}&endDate=${endDate}`)
+        .then((response) => response.json())
+        .then((data: DataItem[]) => {
+          const dataMap: { [key: string]: number } = {};
+          data.forEach((item) => {
+            // Map iso_code to the value of the specified column (cases, deaths, etc.)
+            dataMap[item.iso_code] = parseInt(item[column]);
+          });
+          setCountryData(dataMap);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    }
+  }, [column, endDate]);
 
-  const handleMouseEnter = (event: React.MouseEvent, countryData: DataItem) => {
-    setTooltipContent(`Country: ${countryData.location}, Cases: ${countryData.total_cases}`);
+  const handleMouseEnter = (event: React.MouseEvent, countryData: any) => {
+    setTooltipContent(`Country: ${countryData.location}, ${column}: ${countryData[column]}`);
     setMousePosition({ x: event.clientX, y: event.clientY });
   };
 
   const handleMouseLeave = () => {
-    //setTooltipContent("");
+    setTooltipContent(""); // Clear tooltip content
   };
 
   return (
-    <div style={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}>
+    <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
       <h2>COVID-19 World Map</h2>
-      <ComposableMap projectionConfig={{ scale: 200 }}>
-        <Geographies geography={geoUrl}>
-          {({ geographies }) =>
-            geographies.map((geo) => {
-              const isoCode = geo.id;
-              const cases = countryData[isoCode] || 0;
-              return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill={colorScale(cases)}
-                  
-                  onMouseEnter={(event) => handleMouseEnter(event, data)}
-                  onMouseLeave={handleMouseLeave}
-                  style={{
-                    default: { outline: "none" },
-                    hover: { fill: "#FF5722", outline: "none" },
-                    pressed: { fill: "#E42", outline: "none" },
-                  }}
-                />
-              );
-            })
-          }
-        </Geographies>
-      </ComposableMap>
+      {loading ? (
+        <p>Loading data...</p>
+      ) : (
+        <ComposableMap projectionConfig={{ scale: 200 }}>
+          <Geographies geography={geoUrl}>
+            {({ geographies }) =>
+              geographies.map((geo) => {
+                const isoCode = geo.id;
+                const value = countryData[isoCode] || 0;
+                return (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill={colorScale(value)}
+                    onMouseEnter={(event) =>
+                      handleMouseEnter(event, { iso_code: isoCode, [column]: value, location: geo.properties.name })
+                    }
+                    onMouseLeave={handleMouseLeave}
+                    style={{
+                      default: { outline: 'none' },
+                      hover: { fill: '#FF5722', outline: 'none' },
+                      pressed: { fill: '#E42', outline: 'none' },
+                    }}
+                  />
+                );
+              })
+            }
+          </Geographies>
+        </ComposableMap>
+      )}
+
       <Tooltip
         open={!!tooltipContent}
         title={<Typography>{tooltipContent}</Typography>}
         placement="top"
         style={{
-          position: "absolute",
+          position: 'absolute',
           left: mousePosition.x + 15,
           top: mousePosition.y + 15,
         }}

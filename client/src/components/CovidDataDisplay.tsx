@@ -1,6 +1,6 @@
-// components/CovidDataDisplay.tsx
 import React, { useEffect, useState } from 'react';
 import CovidChart from './CovidChart';
+import WorldMap from './CovidWorldMap'; // Import the WorldMap component
 import { ChartType } from '../types/ChartTypes';
 import { DataItem } from '../types/DataItem'; // Import the DataItem type
 
@@ -37,7 +37,7 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
         `http://localhost:5000/api/covid?country=${baselineFilters.country}&startDate=${baselineFilters.startDate}&endDate=${baselineFilters.endDate}`
       )
         .then((response) => response.json())
-        .then((data: DataItem[]) => { // Ensure the fetched data is of type DataItem[]
+        .then((data: DataItem[]) => {
           setData1(data);
           setLoading(false);
         })
@@ -57,7 +57,7 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
         `http://localhost:5000/api/covid?country=${comparisonFilters.country}&startDate=${comparisonFilters.startDate}&endDate=${comparisonFilters.endDate}`
       )
         .then((response) => response.json())
-        .then((data: DataItem[]) => { // Ensure the fetched data is of type DataItem[]
+        .then((data: DataItem[]) => {
           setData2(data);
           setLoading(false);
         })
@@ -78,13 +78,17 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
           </div>
           <div className="chart-placeholder">
             <h2>Data for {baselineFilters.country}</h2>
-            {/* Pass data1 and data2 to CovidChart */}
-            <CovidChart
-              data1={data1}
-              data2={data2} // Pass comparison data (if available)
-              chartType={chartType} // Pass the chartType directly from props
-              selectedColumn={selectedColumn} // Column selected for display (e.g., total_cases)
-            />
+            {/* Render WorldMap if chartType is 'world_map' */}
+            {chartType === ChartType.MAP ? (
+              <WorldMap endDate={baselineFilters.endDate} column={selectedColumn} />
+            ) : (
+              <CovidChart
+                data1={data1}
+                data2={data2} // Pass comparison data (if available)
+                chartType={chartType} // Pass the chartType directly from props
+                selectedColumn={selectedColumn} // Column selected for display (e.g., total_cases)
+              />
+            )}
           </div>
         </>
       )}
