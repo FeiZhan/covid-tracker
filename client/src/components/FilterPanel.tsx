@@ -1,5 +1,5 @@
 // components/FilterPanel.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import CovidFilterForm from './CovidFilterForm';
 import { ChartType } from '../types/ChartTypes';
 
@@ -29,8 +29,7 @@ type FilterPanelProps = {
     endDate: string;
     selectedColumn: string;
   }) => void;
-  chartType: ChartType;
-  setChartType: (chartType: ChartType) => void;
+  onSearch: (chartType: ChartType) => void;
 };
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
@@ -39,45 +38,44 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   columns,
   onBaselineFilterChange,
   onComparisonFilterChange,
-  chartType,
-  setChartType,
+  onSearch,
 }) => {
+  const [chartType, setChartType] = useState<ChartType>(ChartType.LINE);
+
+  const handleChartTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const selectedChartType = event.target.value as ChartType;
+    setChartType(selectedChartType);
+    onSearch(selectedChartType); // Trigger search with new chartType
+  };
+
   return (
-    <div className="filter-panel">
-      <h3>Baseline Filters</h3>
+    <div>
       <CovidFilterForm
         filters={baselineFilters}
         columns={columns}
         onFilterSubmit={onBaselineFilterChange}
-        chartType={chartType}
-        setChartType={setChartType}
       />
       <h3>Comparison Filters</h3>
       <CovidFilterForm
         filters={comparisonFilters || { country: '', startDate: '', endDate: '', selectedColumn: '' }}
         columns={columns}
         onFilterSubmit={onComparisonFilterChange}
-        chartType={chartType}
-        setChartType={setChartType}
       />
 
         {/* Chart Type Selection */}
         <div className="chart-type-selection">
-          <label>
-            Chart Type:
-            <select
-              value={chartType}
-              onChange={(e) => setChartType(e.target.value as ChartType)}
-            >
-              <option value={ChartType.LINE}>Line</option>
-              <option value={ChartType.BAR}>Bar</option>
-              <option value={ChartType.PIE}>Pie</option>
+        <label>
+          Chart Type:
+          <select value={chartType} onChange={handleChartTypeChange}>
+            <option value={ChartType.LINE}>Line</option>
+            <option value={ChartType.BAR}>Bar</option>
+            <option value={ChartType.PIE}>Pie</option>
               <option value={ChartType.AREA}>Area</option>
               <option value={ChartType.RADAR}>Radar</option>
               <option value={ChartType.MAP}>Map</option>
-            </select>
-          </label>
-        </div>
+          </select>
+        </label>
+      </div>
     </div>
   );
 };

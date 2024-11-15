@@ -1,7 +1,6 @@
 // components/CovidFilterForm.tsx
 import React, { useState, ChangeEvent } from 'react';
 import { TextField, MenuItem, Select, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
-import { ChartType } from '../types/ChartTypes';
 
 type FilterProps = {
   filters: {
@@ -17,19 +16,13 @@ type FilterProps = {
     endDate: string;
     selectedColumn: string;
   }) => void;
-  chartType: ChartType;
-  setChartType: (chartType: ChartType) => void;
 };
 
-const CovidFilterForm: React.FC<FilterProps> = ({ filters, columns, onFilterSubmit, chartType, setChartType }) => {
+const CovidFilterForm: React.FC<FilterProps> = ({ filters, columns, onFilterSubmit }) => {
   const [country, setCountry] = useState(filters.country);
   const [startDate, setStartDate] = useState(filters.startDate);
   const [endDate, setEndDate] = useState(filters.endDate);
   const [selectedColumn, setSelectedColumn] = useState(filters.selectedColumn);
-
-  const handleChartTypeChange = (event: SelectChangeEvent<string>) => {
-    setChartType(event.target.value as ChartType); // Update chartType via setter
-  };
 
   const handleSubmit = () => {
     onFilterSubmit({ country, startDate, endDate, selectedColumn });
@@ -92,15 +85,6 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, columns, onFilterSubm
           {columns.map((column) => (
             <MenuItem key={column} value={column}>{column}</MenuItem>
           ))}
-        </Select>
-      </FormControl>
-
-      <FormControl fullWidth margin="normal">
-        <InputLabel>Chart Type</InputLabel>
-        <Select value={chartType} onChange={handleChartTypeChange}>
-          <MenuItem value={ChartType.LINE}>Line</MenuItem>
-          <MenuItem value={ChartType.BAR}>Bar</MenuItem>
-          <MenuItem value={ChartType.PIE}>Pie</MenuItem>
         </Select>
       </FormControl>
     </div>

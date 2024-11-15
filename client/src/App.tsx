@@ -52,6 +52,10 @@ const App: React.FC = () => {
     setComparisonFilters(filters);
   };
 
+  const handleChartTypeChange = (chartType: ChartType) => {
+    setChartType(chartType);
+  };
+
   return (
     <div className="App">
       <h1>COVID-19 Data Tracker</h1>
@@ -61,14 +65,13 @@ const App: React.FC = () => {
         columns={columns}
         onBaselineFilterChange={handleBaselineFilterChange}
         onComparisonFilterChange={handleComparisonFilterChange}
-        chartType={chartType}
-        setChartType={setChartType}
+        onSearch={handleChartTypeChange}  // Pass down chart type change handler
       />
 
       <CovidDataDisplay
         baselineFilters={baselineFilters}
         comparisonFilters={comparisonFilters}
-        chartType={chartType}
+        chartType={chartType}  // Directly use the chartType from baselineFilters
       />
     </div>
   );
