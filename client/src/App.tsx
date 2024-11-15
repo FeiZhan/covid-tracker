@@ -34,6 +34,7 @@ const App: React.FC = () => {
     'new_deaths',
   ];
 
+  // Function to handle baseline filter changes
   const handleBaselineFilterChange = (filters: {
     country: string;
     startDate: string;
@@ -43,6 +44,7 @@ const App: React.FC = () => {
     setBaselineFilters(filters);
   };
 
+  // Function to handle comparison filter changes
   const handleComparisonFilterChange = (filters: {
     country: string;
     startDate: string;
@@ -52,8 +54,18 @@ const App: React.FC = () => {
     setComparisonFilters(filters);
   };
 
+  // Function to handle chart type changes
   const handleChartTypeChange = (chartType: ChartType) => {
     setChartType(chartType);
+  };
+
+  // Function to handle column changes
+  const handleColumnChange = (column: string) => {
+    // Update baseline filter column
+    setBaselineFilters((prevFilters) => ({
+      ...prevFilters,
+      selectedColumn: column,
+    }));
   };
 
   return (
@@ -65,13 +77,14 @@ const App: React.FC = () => {
         columns={columns}
         onBaselineFilterChange={handleBaselineFilterChange}
         onComparisonFilterChange={handleComparisonFilterChange}
-        onSearch={handleChartTypeChange}  // Pass down chart type change handler
+        onSearch={handleChartTypeChange} // Pass down chart type change handler
+        onColumnChange={handleColumnChange} // Pass down column change handler
       />
 
       <CovidDataDisplay
         baselineFilters={baselineFilters}
         comparisonFilters={comparisonFilters}
-        chartType={chartType}  // Directly use the chartType from baselineFilters
+        chartType={chartType} // Pass down the selected chartType
       />
     </div>
   );
