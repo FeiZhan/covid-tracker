@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import FilterPanel from './components/FilterPanel';
 import CovidDataDisplay from './components/CovidDataDisplay';
 import './App.css';
-import { Filter, defaultFilter } from './types/FilterTypes'; // Import Filter and defaultFilter
+import FilterType, { defaultFilter } from './types/FilterType'; // Import Filter and defaultFilter
 
 const App: React.FC = () => {
   // Use the Filter type and initialize with defaultFilter
-  const [filters, setFilters] = useState<Filter>(defaultFilter);
+  const [filters, setFilters] = useState<FilterType>(defaultFilter);
 
   return (
     <div className="App">

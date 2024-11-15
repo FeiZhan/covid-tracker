@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import CovidFilterForm from './CovidFilterForm';
 import ChartType from '../types/ChartType';
-import { Filter, columns } from '../types/FilterTypes'; // Import FilterTypes
+import FilterType, {Columns} from '../types/FilterType'; // Import FilterTypes
 
 type FilterPanelProps = {
-  filters: Filter; // Now using Filter type for filters
-  onFilterChange: (newFilters: Filter) => void; // Update filter change handler
+  filters: FilterType; // Now using Filter type for filters
+  onFilterChange: (newFilters: FilterType) => void; // Update filter change handler
 };
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
@@ -57,7 +57,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             value={selectedColumn}
             onChange={handleColumnChange}
           >
-            {columns.map((column) => (
+            {Columns.map((column) => (
               <option key={column} value={column}>
                 {column}
               </option>

@@ -3,11 +3,11 @@ import CovidChart from './CovidChart';
 import WorldMap from './CovidWorldMap'; // Import the WorldMap component
 import ChartType from '../types/ChartType';
 import DataType from '../types/DataType'; // Import the DataItem type
-import { Filter } from '../types/FilterTypes'; // Import the Filter type
+import FilterType from '../types/FilterType'; // Import the Filter type
 
 type DataDisplayProps = {
-  filters: Filter; // Expect the entire filters object
-  onFilterChange: React.Dispatch<React.SetStateAction<Filter>>; // Setter for filters object
+  filters: FilterType; // Expect the entire filters object
+  onFilterChange: React.Dispatch<React.SetStateAction<FilterType>>; // Setter for filters object
 };
 
 export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
