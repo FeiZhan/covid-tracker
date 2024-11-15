@@ -12,7 +12,7 @@ type CovidChartProps = {
   selectedColumn: string; // Data column to display
 };
 
-const CovidChart: React.FC<CovidChartProps> = ({ data1, data2, chartType, selectedColumn }) => {
+const DataChart: React.FC<CovidChartProps> = ({ data1, data2, chartType, selectedColumn }) => {
   const isComparison = data2 && data2.length > 0; // Check if comparison data is provided
 
   // Map data1 and data2 into the format expected by the Bar and Line chart components
@@ -77,4 +77,4 @@ const CovidChart: React.FC<CovidChartProps> = ({ data1, data2, chartType, select
   }
 };
 
-export default CovidChart;
+export default DataChart;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CovidChart from './CovidChart';
+import DataChart from './DataChart';
 import WorldMap from './CovidWorldMap';
 import ChartType from '../types/ChartType';
 import DataType from '../types/DataType';
@@ -82,7 +82,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
                 onCountrySelect={handleCountrySelect}
               />
             ) : (
-              <CovidChart
+              <DataChart
                 data1={data1}
                 data2={data2}
                 chartType={chartType}
