@@ -9,6 +9,7 @@ type DataDisplayProps = {
     startDate: string;
     endDate: string;
     chartType: ChartType;
+    selectedColumn: string; // New property for selected data column
   };
 };
 
@@ -44,7 +45,8 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({ filters }) => {
           </div>
           <div className="chart-placeholder">
             <h2>Data for {filters.country}</h2>
-            <CovidChart data={data} chartType={filters.chartType} />
+            {/* Pass the selected column to CovidChart */}
+            <CovidChart data={data} chartType={filters.chartType} selectedColumn={filters.selectedColumn} />
           </div>
         </>
       )}

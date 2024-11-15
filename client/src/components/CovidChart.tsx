@@ -1,7 +1,7 @@
 // src/components/CovidChart.tsx
 import React from 'react';
 import {
-  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 import { CovidData } from '../types/DataItem'; // Import types
 import CovidWorldMap from './CovidWorldMap';
@@ -10,9 +10,10 @@ import { ChartType } from '../types/ChartTypes';
 type CovidChartProps = {
   data: CovidData[];
   chartType: ChartType;
+  selectedColumn: string; // Added prop for selected data column
 };
 
-const CovidChart: React.FC<CovidChartProps> = ({ data, chartType }) => {
+const CovidChart: React.FC<CovidChartProps> = ({ data, chartType, selectedColumn }) => {
   switch (chartType) {
     case ChartType.LINE:
       return (
@@ -23,7 +24,8 @@ const CovidChart: React.FC<CovidChartProps> = ({ data, chartType }) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="new_cases" stroke="#8884d8" activeDot={{ r: 8 }} />
+            {/* Use the selectedColumn for the Line chart */}
+            <Line type="monotone" dataKey={selectedColumn} stroke="#8884d8" activeDot={{ r: 8 }} />
           </LineChart>
         </ResponsiveContainer>
       );
@@ -36,12 +38,15 @@ const CovidChart: React.FC<CovidChartProps> = ({ data, chartType }) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="new_cases" fill="#8884d8" />
+            {/* Use the selectedColumn for the Bar chart */}
+            <Bar dataKey={selectedColumn} fill="#8884d8" />
           </BarChart>
         </ResponsiveContainer>
       );
     case ChartType.MAP:
-      return (<CovidWorldMap data={data[data.length - 1]} />);
+      return (
+        <CovidWorldMap data={data[data.length - 1]} />
+      );
     default:
       return <div>Select a chart type to display the data.</div>;
   }
