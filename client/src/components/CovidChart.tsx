@@ -4,6 +4,7 @@ import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import { CovidData, CovidCountryData } from '../types/CovidData'; // Import types
+import CovidWorldMap from './CovidWorldMap';
 import { ChartType } from '../types/ChartTypes';
 
 type CovidChartProps = {
@@ -39,6 +40,8 @@ const CovidChart: React.FC<CovidChartProps> = ({ data, chartType }) => {
           </BarChart>
         </ResponsiveContainer>
       );
+    case ChartType.MAP:
+      return (<CovidWorldMap data={data[data.length - 1]} />);
     default:
       return <div>Select a chart type to display the data.</div>;
   }

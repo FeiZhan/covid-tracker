@@ -1,5 +1,6 @@
 // src/types/CovidData.ts
 export interface CovidCountryData {
+    iso_code: string;
     continent: string;
     location: string;
     last_updated_date: string;
