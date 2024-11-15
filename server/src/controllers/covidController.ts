@@ -1,51 +1,67 @@
 import fs from 'fs';
 import path from 'path';
 import csv from 'csv-parser';
-import DataItem from '../types/dataItem'
+import { Request, Response } from 'express';
+import DataItem from '../types/dataItem';
 
 const csvFilePath = path.join(__dirname, '../../../datasets/covid-19/public/data/owid-covid-data.csv');
 
-// Function to read and filter the data based on query parameters
-export const getCovidData = (req: any, res: any): void => {
+let covidData: DataItem[] = []; // Store the CSV data in memory
+
+// Function to load the CSV into memory at startup
+const loadCsvIntoMemory = async (): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    const data: DataItem[] = [];
+    fs.createReadStream(csvFilePath)
+      .pipe(csv())
+      .on('data', (row: any) => {
+        data.push(row);
+      })
+      .on('end', () => {
+        covidData = data;
+        console.log('CSV file loaded into memory.');
+        resolve();
+      })
+      .on('error', (err: Error) => {
+        console.error('Error loading CSV file:', err);
+        reject(err);
+      });
+  });
+};
+
+// Function to handle API requests
+export const getCovidData = (req: Request, res: Response): void => {
   const { country, startDate, endDate } = req.query;
 
-  const filteredData: DataItem[] = [];
+  if (!covidData.length) {
+    res.status(500).json({ message: 'Data not loaded into memory.' });
+  }
 
-  fs.createReadStream(csvFilePath)
-    .pipe(csv())
-    .on('data', (row: any) => {
-      const date = row.date;
+  const filteredData = covidData.filter((row) => {
+    const date = new Date(row.date);
+    let include = true;
 
-      let include = true;
+    if (country && row.location !== country) {
+      include = false;
+    }
+    if (startDate && date < new Date(startDate as string)) {
+      include = false;
+    }
+    if (endDate && date > new Date(endDate as string)) {
+      include = false;
+    }
 
-      // Filter by country if specified
-      if (country && row.location !== country) {
-        include = false;
-      }
+    return include;
+  });
 
-      // Filter by start date if specified
-      if (startDate && new Date(date) < new Date(startDate)) {
-        include = false;
-      }
+  if (filteredData.length === 0) {
+    res.status(404).json({ message: 'No data found for the given filters.' });
+  }
 
-      // Filter by end date if specified
-      if (endDate && new Date(date) > new Date(endDate)) {
-        include = false;
-      }
+  res.status(200).json(filteredData);
+};
 
-      // If conditions match, include this row in the response
-      if (include) {
-        filteredData.push(row);
-      }
-    })
-    .on('end', () => {
-      if (filteredData.length === 0) {
-        return res.status(404).json({ message: 'No data found for the given filters.' });
-      }
-      res.status(200).json(filteredData);
-    })
-    .on('error', (err: Error) => {
-      console.error('Error reading CSV file:', err);
-      res.status(500).json({ message: 'Error reading CSV file' });
-    });
+// Function to initialize the controller
+export const initializeCovidController = async (): Promise<void> => {
+  await loadCsvIntoMemory();
 };
