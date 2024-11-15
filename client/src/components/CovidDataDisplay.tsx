@@ -46,7 +46,7 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({ filters }) => {
           <div className="chart-placeholder">
             <h2>Data for {filters.country}</h2>
             {/* Pass the selected column to CovidChart */}
-            <CovidChart data={data} chartType={filters.chartType} selectedColumn={filters.selectedColumn} />
+            <CovidChart data1={data} chartType={filters.chartType} selectedColumn={filters.selectedColumn} />
           </div>
         </>
       )}
