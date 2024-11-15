@@ -10,7 +10,7 @@ type DataDisplayProps = {
   onFilterChange: React.Dispatch<React.SetStateAction<FilterType>>;
 };
 
-export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
+export const DataDisplay: React.FC<DataDisplayProps> = ({
   filters,
   onFilterChange,
 }) => {
@@ -96,4 +96,4 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
   );
 };
 
-export default CovidDataDisplay;
+export default DataDisplay;

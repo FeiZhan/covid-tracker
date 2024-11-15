@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FilterPanel from './components/FilterPanel';
-import CovidDataDisplay from './components/CovidDataDisplay';
+import DataDisplay from './components/DataDisplay';
 import './App.css';
 import FilterType, { defaultFilter } from './types/FilterType';
 
@@ -14,7 +14,7 @@ const App: React.FC = () => {
         filters={filters}
         onFilterChange={setFilters}
       />
-      <CovidDataDisplay
+      <DataDisplay
         filters={filters}
         onFilterChange={setFilters}
       />
