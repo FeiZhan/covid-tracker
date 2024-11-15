@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { CovidData } from './types/DataItem'; // Import types
+import { DataItem } from './types/DataItem'; // Import types
 
 const LocalDataFetcher: React.FC = () => {
-  const [covidData, setCovidData] = useState<CovidData | null>(null);
+  const [covidData, setCovidData] = useState<DataItem[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,7 +16,7 @@ const LocalDataFetcher: React.FC = () => {
           throw new Error('Failed to fetch COVID data');
         }
 
-        const data: CovidData = await response.json(); // TypeScript infers the type here
+        const data: DataItem[] = await response.json(); // TypeScript infers the type here
         setCovidData(data);
         setLoading(false);
       } catch (err: any) {
@@ -37,10 +37,10 @@ const LocalDataFetcher: React.FC = () => {
       <h1>COVID-19 Data by Country</h1>
       {covidData && Object.keys(covidData).length > 0 ? (
         <div>
-          {Object.keys(covidData).map((countryCode) => {
-            const country = covidData[countryCode]; // Get the country data
+          {covidData.map((value, index) => {
+            const country = covidData[index]; // Get the country data
             return (
-              <div key={countryCode}>
+              <div key={index}>
                 <h3>{country.location} ({country.continent})</h3>
                 <p>Total Cases: {country.total_cases}</p>
                 <p>Total Deaths: {country.total_deaths}</p>

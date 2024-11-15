@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import CovidChart from './CovidChart';
 import { ChartType } from '../types/ChartTypes';
+import { DataItem } from '../types/DataItem'; // Import the DataItem type
 
 type DataDisplayProps = {
   baselineFilters: {
@@ -24,8 +25,8 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
   chartType, // Access the chartType prop here
   selectedColumn, // Access the selectedColumn prop
 }) => {
-  const [data1, setData1] = useState<any[]>([]); // Data for the baseline (selected country)
-  const [data2, setData2] = useState<any[]>([]); // Data for the comparison (optional)
+  const [data1, setData1] = useState<DataItem[]>([]); // Data for the baseline (selected country)
+  const [data2, setData2] = useState<DataItem[]>([]); // Data for the comparison (optional)
   const [loading, setLoading] = useState(false);
 
   // Fetch data for the baseline country
@@ -36,7 +37,7 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
         `http://localhost:5000/api/covid?country=${baselineFilters.country}&startDate=${baselineFilters.startDate}&endDate=${baselineFilters.endDate}`
       )
         .then((response) => response.json())
-        .then((data) => {
+        .then((data: DataItem[]) => { // Ensure the fetched data is of type DataItem[]
           setData1(data);
           setLoading(false);
         })
@@ -56,7 +57,7 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
         `http://localhost:5000/api/covid?country=${comparisonFilters.country}&startDate=${comparisonFilters.startDate}&endDate=${comparisonFilters.endDate}`
       )
         .then((response) => response.json())
-        .then((data) => {
+        .then((data: DataItem[]) => { // Ensure the fetched data is of type DataItem[]
           setData2(data);
           setLoading(false);
         })
@@ -71,9 +72,9 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
       {!loading && data1.length > 0 && (
         <>
           <div className="summary-cards">
-            <div className="card">Total Cases: {data1[0]?.total_cases || 0}</div>
-            <div className="card">New Cases: {data1[0]?.new_cases || 0}</div>
-            <div className="card">Total Deaths: {data1[0]?.total_deaths || 0}</div>
+            <div className="card">Total Cases: {data1[data1.length - 1]?.total_cases || 0}</div>
+            <div className="card">New Cases: {data1[data1.length - 1]?.new_cases || 0}</div>
+            <div className="card">Total Deaths: {data1[data1.length - 1]?.total_deaths || 0}</div>
           </div>
           <div className="chart-placeholder">
             <h2>Data for {baselineFilters.country}</h2>

@@ -11,7 +11,3 @@ export interface DataItem {
   new_deaths_smoothed: string;
   [key: string]: string;
 }
-  
-export interface CovidData {
-  [countryCode: string]: DataItem;
-}
