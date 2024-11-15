@@ -16,7 +16,7 @@ const App: React.FC = () => {
     country: 'Afghanistan',
     startDate: '2020-01-01',
     endDate: '2020-12-31',
-    chartType: ChartType.LINE,
+    chartType: ChartType.LINE,  // Default chart type for baseline
     selectedColumn: 'total_cases',
   });
 
@@ -57,8 +57,12 @@ const App: React.FC = () => {
   };
 
   const handleSearch = (chartType: ChartType) => {
-    // This is where you handle the search logic,
-    // which could include triggering updates for data visualization with the chart type applied
+    // Here we handle the search logic that triggers updates for data visualization.
+    // Update the chartType for the baseline and/or comparison filters
+    setBaselineFilters(prevFilters => ({
+      ...prevFilters,
+      chartType,  // Update chartType in baseline filters
+    }));
     console.log('Search triggered with chart type:', chartType);
   };
 
@@ -74,7 +78,11 @@ const App: React.FC = () => {
         onSearch={handleSearch}
       />
 
-      <CovidDataDisplay baselineFilters={baselineFilters} comparisonFilters={comparisonFilters} />
+      <CovidDataDisplay
+        baselineFilters={baselineFilters}
+        comparisonFilters={comparisonFilters}
+        chartType={baselineFilters.chartType}  // Pass chartType to CovidDataDisplay
+      />
     </div>
   );
 };
