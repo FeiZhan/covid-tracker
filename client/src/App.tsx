@@ -6,7 +6,6 @@ import './App.css';
 import { ChartType } from './types/ChartTypes';
 
 const App: React.FC = () => {
-  // Remove chartType from the filters; manage it separately
   const [baselineFilters, setBaselineFilters] = useState<{
     country: string;
     startDate: string;
@@ -26,14 +25,13 @@ const App: React.FC = () => {
     selectedColumn: string;
   } | undefined>(undefined);
 
-  const [chartType, setChartType] = useState<ChartType>(ChartType.LINE); // Global chartType
+  const [chartType, setChartType] = useState<ChartType>(ChartType.LINE);
 
   const columns = [
     'total_cases',
     'new_cases',
     'total_deaths',
     'new_deaths',
-    // Add more columns as needed
   ];
 
   const handleBaselineFilterChange = (filters: {
@@ -54,12 +52,6 @@ const App: React.FC = () => {
     setComparisonFilters(filters);
   };
 
-  const handleSearch = (newChartType: ChartType) => {
-    // Update the global chartType
-    setChartType(newChartType);
-    console.log('Search triggered with chart type:', newChartType);
-  };
-
   return (
     <div className="App">
       <h1>COVID-19 Data Tracker</h1>
@@ -69,15 +61,14 @@ const App: React.FC = () => {
         columns={columns}
         onBaselineFilterChange={handleBaselineFilterChange}
         onComparisonFilterChange={handleComparisonFilterChange}
-        onSearch={handleSearch}
-        chartType={chartType} // Pass chartType to FilterPanel
-        setChartType={setChartType} // Pass setChartType to modify it from FilterPanel
+        chartType={chartType}
+        setChartType={setChartType}
       />
 
       <CovidDataDisplay
         baselineFilters={baselineFilters}
         comparisonFilters={comparisonFilters}
-        chartType={chartType}  // Pass chartType to CovidDataDisplay
+        chartType={chartType}
       />
     </div>
   );

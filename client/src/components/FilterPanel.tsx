@@ -29,9 +29,8 @@ type FilterPanelProps = {
     endDate: string;
     selectedColumn: string;
   }) => void;
-  onSearch: (chartType: ChartType) => void;
-  chartType: ChartType; // Receive chartType as a prop
-  setChartType: (chartType: ChartType) => void; // Receive setter for chartType
+  chartType: ChartType;
+  setChartType: (chartType: ChartType) => void;
 };
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
@@ -40,7 +39,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   columns,
   onBaselineFilterChange,
   onComparisonFilterChange,
-  onSearch,
   chartType,
   setChartType,
 }) => {
@@ -51,17 +49,17 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         filters={baselineFilters}
         columns={columns}
         onFilterSubmit={onBaselineFilterChange}
-        chartType={chartType} // Pass chartType to CovidFilterForm
-        setChartType={setChartType} // Pass setChartType to modify it
+        chartType={chartType}
+        setChartType={setChartType}
       />
       <h3>Comparison Filters</h3>
       <CovidFilterForm
         filters={comparisonFilters || { country: '', startDate: '', endDate: '', selectedColumn: '' }}
         columns={columns}
         onFilterSubmit={onComparisonFilterChange}
-        chartType={chartType} // Pass chartType to CovidFilterForm
-        setChartType={setChartType} // Pass setChartType to modify it
-        />
+        chartType={chartType}
+        setChartType={setChartType}
+      />
 
         {/* Chart Type Selection */}
         <div className="chart-type-selection">
@@ -80,9 +78,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             </select>
           </label>
         </div>
-  
-        {/* Search Button */}
-      <button onClick={() => onSearch(chartType)}>Search</button>
     </div>
   );
 };
