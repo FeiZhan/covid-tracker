@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CovidChart from './CovidChart';
 import WorldMap from './CovidWorldMap'; // Import the WorldMap component
 import ChartType from '../types/ChartType';
-import { DataItem } from '../types/DataItem'; // Import the DataItem type
+import DataType from '../types/DataType'; // Import the DataItem type
 import { Filter } from '../types/FilterTypes'; // Import the Filter type
 
 type DataDisplayProps = {
@@ -14,8 +14,8 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
   filters,
   onFilterChange, // Access setter for filters
 }) => {
-  const [data1, setData1] = useState<DataItem[]>([]); // Data for the baseline (selected country)
-  const [data2, setData2] = useState<DataItem[]>([]); // Data for the comparison (optional)
+  const [data1, setData1] = useState<DataType[]>([]); // Data for the baseline (selected country)
+  const [data2, setData2] = useState<DataType[]>([]); // Data for the comparison (optional)
   const [loading, setLoading] = useState(false);
 
   // Destructure filters into baseline and comparison filters
@@ -29,7 +29,7 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
         `http://localhost:5000/api/covid?country=${baselineFilter.country}&startDate=${baselineFilter.startDate}&endDate=${baselineFilter.endDate}`
       )
         .then((response) => response.json())
-        .then((data: DataItem[]) => {
+        .then((data: DataType[]) => {
           setData1(data);
           setLoading(false);
         })
@@ -45,7 +45,7 @@ export const CovidDataDisplay: React.FC<DataDisplayProps> = ({
         `http://localhost:5000/api/covid?country=${comparisonFilter.country}&startDate=${comparisonFilter.startDate}&endDate=${comparisonFilter.endDate}`
       )
         .then((response) => response.json())
-        .then((data: DataItem[]) => {
+        .then((data: DataType[]) => {
           setData2(data);
           setLoading(false);
         })

@@ -1,4 +1,4 @@
-export interface DataItem {
+interface DataType {
   iso_code: string;
   continent: string;
   location: string;
@@ -11,3 +11,5 @@ export interface DataItem {
   new_deaths_smoothed: string;
   [key: string]: string;
 }
+
+export default DataType;

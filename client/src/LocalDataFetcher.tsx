@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { DataItem } from './types/DataItem'; // Import types
+import DataType from './types/DataType'; // Import types
 
 const LocalDataFetcher: React.FC = () => {
-  const [covidData, setCovidData] = useState<DataItem[] | null>(null);
+  const [covidData, setCovidData] = useState<DataType[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,7 +16,7 @@ const LocalDataFetcher: React.FC = () => {
           throw new Error('Failed to fetch COVID data');
         }
 
-        const data: DataItem[] = await response.json(); // TypeScript infers the type here
+        const data: DataType[] = await response.json(); // TypeScript infers the type here
         setCovidData(data);
         setLoading(false);
       } catch (err: any) {

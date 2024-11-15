@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
 import { Tooltip, Typography } from '@mui/material';
-import { DataItem } from '../types/DataItem';
+import DataType from '../types/DataType';
 
 const colorScale = scaleLinear<string>()
   .domain([0, 1000000, 10000000]) // Adjust based on your dataset
@@ -28,7 +28,7 @@ const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ column, endDate, onCountr
       setLoading(true);
       fetch(`http://localhost:5000/api/covid?column=${column}&endDate=${endDate}`)
         .then((response) => response.json())
-        .then((data: DataItem[]) => {
+        .then((data: DataType[]) => {
           const dataMap: { [key: string]: number } = {};
           data.forEach((item) => {
             dataMap[item.iso_code] = parseInt(item[column]);
