@@ -25,10 +25,7 @@ const CovidChart: React.FC<CovidChartProps> = ({ data1, data2, chartType, select
   };
 
   const chartData1 = transformData(data1);
-  const chartData2: {
-    name: string;
-    value: number;
-}[] = data2 ? transformData(data2) : [];
+  const chartData2 = data2 && data2.length ? transformData(data2) : [];
 
   switch (chartType) {
     case ChartType.LINE:
@@ -79,10 +76,7 @@ const CovidChart: React.FC<CovidChartProps> = ({ data1, data2, chartType, select
     case ChartType.MAP:
       return (
         <CovidWorldMap
-          data={{
-            baseline: data1[data1.length - 1],
-            comparison: isComparison ? data2[data2.length - 1] : null,
-          }}
+          data={data1[data1.length - 1]}
         />
       );
     default:

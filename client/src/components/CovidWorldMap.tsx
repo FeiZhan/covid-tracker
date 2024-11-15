@@ -14,7 +14,7 @@ const geoUrl =
 
 
 interface CovidWorldMapProps {
-  data: any;
+  data: DataItem;
 }
 
 const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ data }) => {
@@ -25,7 +25,7 @@ const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ data }) => {
   // Map dataset to a dictionary with iso_code as keys for quick lookups
   useEffect(() => {
     const dataMap: { [key: string]: number } = {};
-    dataMap[data.iso_code] = data.total_cases;
+    dataMap[data.iso_code] = parseInt(data.total_cases);
     setCountryData(dataMap);
   }, [data]);
 
