@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
 import { Tooltip, Typography } from "@mui/material";
-import { CovidData, CovidCountryData } from '../types/CovidData'; // Import types
+import { DataItem } from '../types/DataItem'; // Import types
 
 // Define color scale for cases
 const colorScale = scaleLinear<string>()
@@ -29,7 +29,7 @@ const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ data }) => {
     setCountryData(dataMap);
   }, [data]);
 
-  const handleMouseEnter = (event: React.MouseEvent, countryData: CovidCountryData) => {
+  const handleMouseEnter = (event: React.MouseEvent, countryData: DataItem) => {
     setTooltipContent(`Country: ${countryData.location}, Cases: ${countryData.total_cases}`);
     setMousePosition({ x: event.clientX, y: event.clientY });
   };

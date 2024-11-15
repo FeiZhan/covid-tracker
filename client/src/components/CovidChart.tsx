@@ -3,7 +3,7 @@ import React from 'react';
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
-import { CovidData, CovidCountryData } from '../types/CovidData'; // Import types
+import { CovidData } from '../types/DataItem'; // Import types
 import CovidWorldMap from './CovidWorldMap';
 import { ChartType } from '../types/ChartTypes';
 

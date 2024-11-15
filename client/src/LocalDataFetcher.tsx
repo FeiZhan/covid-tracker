@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CovidData, CovidCountryData } from './types/CovidData'; // Import types
+import { CovidData } from './types/DataItem'; // Import types
 
 const LocalDataFetcher: React.FC = () => {
   const [covidData, setCovidData] = useState<CovidData | null>(null);

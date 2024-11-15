@@ -1,20 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import csv from 'csv-parser';
-
-interface CovidData {
-  iso_code: string;
-  continent: string;
-  location: string;
-  date: string;
-  total_cases: string;
-  new_cases: string;
-  new_cases_smoothed: string;
-  total_deaths: string;
-  new_deaths: string;
-  new_deaths_smoothed: string;
-  [key: string]: string;
-}
+import DataItem from '../types/dataItem'
 
 const csvFilePath = path.join(__dirname, '../../../datasets/covid-19/public/data/owid-covid-data.csv');
 
@@ -22,7 +9,7 @@ const csvFilePath = path.join(__dirname, '../../../datasets/covid-19/public/data
 export const getCovidData = (req: any, res: any): void => {
   const { country, startDate, endDate } = req.query;
 
-  const filteredData: CovidData[] = [];
+  const filteredData: DataItem[] = [];
 
   fs.createReadStream(csvFilePath)
     .pipe(csv())
