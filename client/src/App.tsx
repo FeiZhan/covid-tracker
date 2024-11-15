@@ -6,19 +6,29 @@ import './App.css';
 import { ChartType } from './types/ChartTypes';
 
 const App: React.FC = () => {
-  const [filters, setFilters] = useState<{
+  // State for the two sets of filters
+  const [baselineFilters, setBaselineFilters] = useState<{
     country: string;
     startDate: string;
     endDate: string;
     chartType: ChartType;
-    selectedColumn: string; // Added selected column to filters
+    selectedColumn: string;
   }>({
     country: 'Afghanistan',
     startDate: '2020-01-01',
     endDate: '2020-12-31',
     chartType: ChartType.LINE,
-    selectedColumn: 'total_cases', // Default column
+    selectedColumn: 'total_cases',
   });
+
+  // State for the optional comparisonFilters
+  const [comparisonFilters, setComparisonFilters] = useState<{
+    country: string;
+    startDate: string;
+    endDate: string;
+    chartType: ChartType;
+    selectedColumn: string;
+  } | undefined>(undefined); // comparisonFilters can be undefined
 
   const columns = [
     'total_cases',
@@ -31,12 +41,21 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <h1>COVID-19 Data Tracker</h1>
+      <h2>Baseline Data</h2>
       <CovidFilterForm
-        filters={filters}
-        columns={columns} // Pass available columns to the form
-        onFilterSubmit={setFilters}
+        filters={baselineFilters}
+        columns={columns}
+        onFilterSubmit={setBaselineFilters} // Update baseline filters
       />
-      <CovidDataDisplay baselineFilters={filters} />
+      
+      <h2>Comparison Data (Optional)</h2>
+      <CovidFilterForm
+        filters={comparisonFilters || baselineFilters} // Default to baseline filters if comparison is undefined
+        columns={columns}
+        onFilterSubmit={setComparisonFilters} // Update comparison filters
+      />
+      
+      <CovidDataDisplay baselineFilters={baselineFilters} comparisonFilters={comparisonFilters} />
     </div>
   );
 };
