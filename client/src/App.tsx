@@ -36,7 +36,7 @@ const App: React.FC = () => {
         columns={columns} // Pass available columns to the form
         onFilterSubmit={setFilters}
       />
-      <CovidDataDisplay filters={filters} />
+      <CovidDataDisplay baselineFilters={filters} />
     </div>
   );
 };
