@@ -1,47 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CovidFilterForm from './CovidFilterForm';
 import ChartType from '../types/ChartType';
-import FilterType, { ColumnType } from '../types/FilterType'; // Import FilterTypes with Column enum
+import FilterType, { ColumnType } from '../types/FilterType';
 
 type FilterPanelProps = {
-  filters: FilterType; // Now using Filter type for filters
-  onFilterChange: (newFilters: FilterType) => void; // Update filter change handler
+  filters: FilterType;
+  onFilterChange: (newFilters: FilterType) => void;
 };
 
-const FilterPanel: React.FC<FilterPanelProps> = ({
-  filters,
-  onFilterChange,
-}) => {
-  const [selectedColumn, setSelectedColumn] = useState<ColumnType>(filters.column); // Use Column enum for selectedColumn
-
-  const handleChartTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedChartType = event.target.value as ChartType;
+const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange }) => {
+  const handleChartTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onFilterChange({
       ...filters,
-      chartType: selectedChartType, // Update chart type
+      chartType: event.target.value as ChartType,
     });
   };
 
   const handleColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const column = event.target.value as ColumnType; // Ensure column is of type Column enum
-    setSelectedColumn(column); // Update the selected column state
     onFilterChange({
       ...filters,
-      column, // Update column in filters
+      column: event.target.value as ColumnType,
     });
   };
 
   const handleBaselineFilterChange = (newBaselineFilter: { country: string; startDate: string; endDate: string }) => {
     onFilterChange({
       ...filters,
-      baselineFilter: newBaselineFilter, // Update baseline filter
+      baselineFilter: newBaselineFilter,
     });
   };
 
   const handleComparisonFilterChange = (newComparisonFilter: { country: string; startDate: string; endDate: string }) => {
     onFilterChange({
       ...filters,
-      comparisonFilter: newComparisonFilter, // Update comparison filter
+      comparisonFilter: newComparisonFilter,
     });
   };
 
@@ -53,13 +45,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       <div className="column-selection">
         <label>
           Select Column:
-          <select
-            value={selectedColumn}
-            onChange={handleColumnChange}
-          >
-            {Object.values(ColumnType).map((column) => ( // Map over enum values
+          <select value={filters.column} onChange={handleColumnChange}>
+            {Object.values(ColumnType).map((column) => (
               <option key={column} value={column}>
-                {column} {/* Display enum value */}
+                {column}
               </option>
             ))}
           </select>
@@ -68,14 +57,14 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
       {/* Baseline Filters */}
       <CovidFilterForm
-        filters={filters.baselineFilter} // Pass baseline filters directly
+        filters={filters.baselineFilter || { country: '', startDate: '', endDate: '' }}
         onFilterSubmit={handleBaselineFilterChange}
       />
 
       <h3>Comparison Filters</h3>
       {/* Comparison Filters */}
       <CovidFilterForm
-        filters={filters.comparisonFilter} // Pass comparison filters directly
+        filters={filters.comparisonFilter || { country: '', startDate: '', endDate: '' }}
         onFilterSubmit={handleComparisonFilterChange}
       />
 
@@ -84,9 +73,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         <label>
           Chart Type:
           <select value={filters.chartType} onChange={handleChartTypeChange}>
-            <option value={ChartType.LINE}>{ChartType.LINE}</option>
-            <option value={ChartType.BAR}>{ChartType.BAR}</option>
-            <option value={ChartType.MAP}>{ChartType.MAP}</option>
+            {Object.values(ChartType).map((chart) => (
+              <option key={chart} value={chart}>
+                {chart}
+              </option>
+            ))}
           </select>
         </label>
       </div>
