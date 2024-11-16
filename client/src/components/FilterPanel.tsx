@@ -1,5 +1,5 @@
 import React from 'react';
-import CovidFilterForm from './CovidFilterForm';
+import FilterForm from './FilterForm';
 import ChartType from '../types/ChartType';
 import FilterType, { ColumnType } from '../types/FilterType';
 
@@ -52,13 +52,13 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange }) =>
         </select>
       </div>
 
-      <CovidFilterForm
+      <FilterForm
         filters={filters.baselineFilter ?? { country: '', startDate: '', endDate: '' }}
         onFilterSubmit={handleBaselineFilterChange}
       />
 
       <h3>Comparison Filters</h3>
-      <CovidFilterForm
+      <FilterForm
         filters={filters.comparisonFilter ?? { country: '', startDate: '', endDate: '' }}
         onFilterSubmit={handleComparisonFilterChange}
       />

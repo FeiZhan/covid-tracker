@@ -14,7 +14,7 @@ type FilterProps = {
   }) => void;
 };
 
-const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
+const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
   const [country, setCountry] = useState(filters.country);
   const [startDate, setStartDate] = useState(filters.startDate);
   const [endDate, setEndDate] = useState(filters.endDate);
@@ -22,8 +22,8 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => 
   // Sync state with incoming props when filters change
   useEffect(() => {
     setCountry(filters.country);
-    setStartDate(filters.startDate);
-    setEndDate(filters.endDate);
+    //setStartDate(filters.startDate);
+    //setEndDate(filters.endDate);
   }, [filters]);
 
   const handleSubmit = () => {
@@ -79,4 +79,4 @@ const CovidFilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => 
   );
 };
 
-export default CovidFilterForm;
+export default FilterForm;
