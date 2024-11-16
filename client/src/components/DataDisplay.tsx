@@ -58,6 +58,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
     onFilterChange((prevFilters) => ({
       ...prevFilters,
       baselineFilter: { ...prevFilters.baselineFilter, country: countryName },
+      chartType: ChartType.LINE,
     }));
   };
 
@@ -67,7 +68,8 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
       <p>Loading data for the selected country...</p>
     </div>
   ) : (
-    <div className="chart-container"
+    <div
+      className="chart-container"
       style={{
         display: 'flex',
         justifyContent: 'center',
