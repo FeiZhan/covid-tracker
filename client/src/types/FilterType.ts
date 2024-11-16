@@ -1,29 +1,19 @@
 import ChartType from './ChartType';
+import ColumnType from './ColumnType';
 
-// Enum for Columns
-export enum ColumnType {
-  TOTAL_CASES = 'total_cases',
-  NEW_CASES = 'new_cases',
-  TOTAL_DEATHS = 'total_deaths',
-  NEW_DEATHS = 'new_deaths',
-}
-
-// BaseFilterType definition
 type BaseFilterType = {
   country: string;
   startDate: string;
   endDate: string;
 };
 
-// Defining types for each filter and configuration
 type Filter = {
   baselineFilter: BaseFilterType;
   comparisonFilter: BaseFilterType;
-  chartType: ChartType;  // Chart type enum
-  column: ColumnType;  // Column enum instead of string
+  chartType: ChartType;
+  column: ColumnType;
 };
 
-// Example for default filter state
 export const defaultFilter: Filter = {
   baselineFilter: {
     country: 'Afghanistan',
@@ -36,7 +26,7 @@ export const defaultFilter: Filter = {
     endDate: '2020-12-31',
   },
   chartType: ChartType.LINE,
-  column: ColumnType.TOTAL_CASES, // Use enum value here
+  column: ColumnType.total_cases,
 };
 
 export default Filter;

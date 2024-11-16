@@ -1,7 +1,8 @@
 import React from 'react';
 import FilterForm from './FilterForm';
 import ChartType from '../types/ChartType';
-import FilterType, { ColumnType } from '../types/FilterType';
+import FilterType from '../types/FilterType';
+import ColumnType from '../types/ColumnType';
 
 type FilterPanelProps = {
   filters: FilterType;
