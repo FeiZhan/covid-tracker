@@ -6,9 +6,8 @@ import DataItem from '../types/dataItem';
 
 const csvFilePath = path.join(__dirname, '../../../datasets/covid-19/public/data/owid-covid-data.csv');
 
-let covidData: DataItem[] = []; // Store the CSV data in memory
+let covidData: DataItem[] = [];
 
-// Function to load the CSV into memory at startup
 const loadCsvIntoMemory = async (): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     const data: DataItem[] = [];
@@ -29,7 +28,6 @@ const loadCsvIntoMemory = async (): Promise<void> => {
   });
 };
 
-// Function to handle API requests
 export const getCovidData = (req: Request, res: Response): void => {
   const { country, startDate, endDate } = req.query;
 
@@ -61,7 +59,6 @@ export const getCovidData = (req: Request, res: Response): void => {
   res.status(200).json(filteredData);
 };
 
-// Function to initialize the controller
 export const initializeCovidController = async (): Promise<void> => {
   await loadCsvIntoMemory();
 };
