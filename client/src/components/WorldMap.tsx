@@ -11,13 +11,13 @@ const colorScale = scaleLinear<string>()
 const geoUrl =
   "https://raw.githubusercontent.com/subyfly/topojson/master/world-countries.json";
 
-interface CovidWorldMapProps {
+interface WorldMapProps {
   column: string; // The column parameter is used instead of country
   endDate: string; // The endDate parameter is now required
   onCountrySelect: (countryName: string) => void; // Callback to update the filter
 }
 
-const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ column, endDate, onCountrySelect }) => {
+const WorldMap: React.FC<WorldMapProps> = ({ column, endDate, onCountrySelect }) => {
   const [countryData, setCountryData] = useState<{ [key: string]: number }>({});
   const [tooltipContent, setTooltipContent] = useState("");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -27,16 +27,27 @@ const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ column, endDate, onCountr
     if (column && endDate) {
       setLoading(true);
       fetch(`http://localhost:5000/api/covid?column=${column}&endDate=${endDate}`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.statusText}`);
+          }
+          return response.json();
+        })
         .then((data: DataType[]) => {
           const dataMap: { [key: string]: number } = {};
           data.forEach((item) => {
-            dataMap[item.iso_code] = parseInt(item[column]);
+            const value = parseInt(item[column]);
+            if (!isNaN(value)) {
+              dataMap[item.iso_code] = value;
+            }
           });
           setCountryData(dataMap);
           setLoading(false);
         })
-        .catch(() => setLoading(false));
+        .catch((error) => {
+          console.error('Failed to fetch data:', error);
+          setLoading(false);
+        });
     }
   }, [column, endDate]);
 
@@ -104,4 +115,4 @@ const CovidWorldMap: React.FC<CovidWorldMapProps> = ({ column, endDate, onCountr
   );
 };
 
-export default CovidWorldMap;
+export default WorldMap;
