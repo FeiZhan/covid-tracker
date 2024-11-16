@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
 import { Tooltip, Typography } from '@mui/material';
@@ -6,7 +6,7 @@ import DataType from '../types/DataType';
 import ColumnType from '../types/ColumnType';
 
 const colorScale = scaleLinear<string>()
-  .domain([0, 1000000, 10000000]) // Adjust based on your dataset
+  .domain([0, 1000000, 10000000])
   .range(["#e0f7fa", "#26c6da", "#01579b"]);
 
 const geoUrl =

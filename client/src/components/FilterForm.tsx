@@ -50,7 +50,7 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
   }, []);
 
   const validateDate = (date: string) => {
-    return date && !isNaN(Date.parse(date)); // Simple date validation
+    return date && !isNaN(Date.parse(date));
   };
 
   const handleSubmit = () => {
