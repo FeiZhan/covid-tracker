@@ -3,6 +3,7 @@ import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
 import { Tooltip, Typography } from '@mui/material';
 import DataType from '../types/DataType';
+import ColumnType from '../types/ColumnType';
 
 const colorScale = scaleLinear<string>()
   .domain([0, 1000000, 10000000]) // Adjust based on your dataset
@@ -12,7 +13,7 @@ const geoUrl =
   "https://raw.githubusercontent.com/subyfly/topojson/master/world-countries.json";
 
 interface WorldMapProps {
-  column: string;
+  column: ColumnType;
   endDate: string;
   onCountrySelect: (countryName: string) => void;
 }

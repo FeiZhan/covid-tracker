@@ -1,7 +1,6 @@
 import React from 'react';
-import {
-  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-} from 'recharts';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import ColumnType from '../types/ColumnType'; // Import the enum
 import DataType from '../types/DataType';
 import ChartType from '../types/ChartType';
 
@@ -9,7 +8,7 @@ type DataChartProps = {
   data1: DataType[];
   data2?: DataType[];
   chartType: ChartType;
-  selectedColumn: string;
+  selectedColumn: ColumnType;
 };
 
 const DataChart: React.FC<DataChartProps> = ({ data1, data2, chartType, selectedColumn }) => {
