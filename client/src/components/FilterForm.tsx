@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { TextField, MenuItem, Select, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
+import { TextField, MenuItem, Select, FormControl, InputLabel, CircularProgress, Button, FormHelperText, SelectChangeEvent } from '@mui/material';
 import DataType from '../types/DataType';
 
 type FilterProps = {
@@ -21,6 +21,7 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
   const [endDate, setEndDate] = useState(filters.endDate);
   const [countries, setCountries] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     setCountry(filters.country);
@@ -55,9 +56,10 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
 
   const handleSubmit = () => {
     if (validateDate(startDate) && validateDate(endDate)) {
+      setErrorMessage('');
       onFilterSubmit({ country, startDate, endDate });
     } else {
-      console.error("Invalid date format");
+      setErrorMessage("Please enter valid start and end dates.");
     }
   };
 
@@ -80,11 +82,15 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
 
   return (
     <form onSubmit={handleFormSubmit} className="filter-form">
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth margin="normal" error={!!errorMessage}>
         <InputLabel>Country</InputLabel>
-        <Select value={country} onChange={handleCountryChange}>
+        <Select value={country} onChange={handleCountryChange} required>
           {loading ? (
-            <MenuItem disabled>Loading countries...</MenuItem>
+            <MenuItem disabled>
+              <CircularProgress size={24} />
+            </MenuItem>
+          ) : countries.length === 0 ? (
+            <MenuItem disabled>No countries available</MenuItem>
           ) : (
             countries.map((countryName) => (
               <MenuItem key={countryName} value={countryName}>
@@ -93,6 +99,7 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
             ))
           )}
         </Select>
+        {errorMessage && <FormHelperText>{errorMessage}</FormHelperText>}
       </FormControl>
 
       <TextField
@@ -104,6 +111,7 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
         InputLabelProps={{ shrink: true }}
         margin="normal"
         required
+        error={!!errorMessage}
       />
 
       <TextField
@@ -115,9 +123,14 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
         InputLabelProps={{ shrink: true }}
         margin="normal"
         required
+        error={!!errorMessage}
       />
 
-      <button type="submit">Submit</button>
+      <div>
+        <Button variant="contained" type="submit" color="primary">
+          Submit
+        </Button>
+      </div>
     </form>
   );
 };
