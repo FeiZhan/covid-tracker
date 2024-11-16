@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box, Typography, FormControl, InputLabel, Select, MenuItem, Paper, SelectChangeEvent } from '@mui/material';
 import FilterForm from './FilterForm';
 import ChartType from '../types/ChartType';
 import FilterType from '../types/FilterType';
@@ -10,14 +11,14 @@ type FilterPanelProps = {
 };
 
 const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange }) => {
-  const handleChartTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChartTypeChange = (event: SelectChangeEvent<ChartType>) => {
     onFilterChange({
       ...filters,
       chartType: event.target.value as ChartType,
     });
   };
 
-  const handleColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleColumnChange = (event: SelectChangeEvent<ColumnType>) => {
     onFilterChange({
       ...filters,
       column: event.target.value as ColumnType,
@@ -39,42 +40,55 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange }) =>
   };
 
   return (
-    <div>
-      <h3>Filters</h3>
-
-      <div className="column-selection">
-        <label htmlFor="column-select">Select Column:</label>
-        <select id="column-select" value={filters.column} onChange={handleColumnChange}>
+    <Box sx={{ padding: 2 }}>
+      <FormControl fullWidth sx={{ marginBottom: 2 }}>
+        <InputLabel id="column-select-label">Select Column</InputLabel>
+        <Select
+          labelId="column-select-label"
+          id="column-select"
+          value={filters.column}
+          onChange={handleColumnChange}
+          label="Select Column"
+        >
           {(Object.values(ColumnType) as ColumnType[]).map((column) => (
-            <option key={column} value={column}>
+            <MenuItem key={column} value={column}>
               {column}
-            </option>
+            </MenuItem>
           ))}
-        </select>
-      </div>
+        </Select>
+      </FormControl>
 
-      <FilterForm
-        filters={filters.baselineFilter ?? { country: '', startDate: '', endDate: '' }}
-        onFilterSubmit={handleBaselineFilterChange}
-      />
+      <Paper sx={{ padding: 2, marginBottom: 3 }}>
+        <FilterForm
+          filters={filters.baselineFilter ?? { country: '', startDate: '', endDate: '' }}
+          onFilterSubmit={handleBaselineFilterChange}
+        />
+      </Paper>
 
-      <h3>Comparison Filters</h3>
-      <FilterForm
-        filters={filters.comparisonFilter ?? { country: '', startDate: '', endDate: '' }}
-        onFilterSubmit={handleComparisonFilterChange}
-      />
+      <Paper sx={{ padding: 2, marginBottom: 3 }}>
+        <FilterForm
+          filters={filters.comparisonFilter ?? { country: '', startDate: '', endDate: '' }}
+          onFilterSubmit={handleComparisonFilterChange}
+        />
+      </Paper>
 
-      <div className="chart-type-selection">
-        <label htmlFor="chart-type-select">Chart Type:</label>
-        <select id="chart-type-select" value={filters.chartType} onChange={handleChartTypeChange}>
+      <FormControl fullWidth sx={{ marginBottom: 2 }}>
+        <InputLabel id="chart-type-select-label">Chart Type</InputLabel>
+        <Select
+          labelId="chart-type-select-label"
+          id="chart-type-select"
+          value={filters.chartType}
+          onChange={handleChartTypeChange}
+          label="Chart Type"
+        >
           {(Object.values(ChartType) as ChartType[]).map((chart) => (
-            <option key={chart} value={chart}>
+            <MenuItem key={chart} value={chart}>
               {chart}
-            </option>
+            </MenuItem>
           ))}
-        </select>
-      </div>
-    </div>
+        </Select>
+      </FormControl>
+    </Box>
   );
 };
 
