@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
-import { Tooltip, Typography } from '@mui/material';
+import { Tooltip, Typography, CircularProgress } from '@mui/material';
 import DataType from '../types/DataType';
 import ColumnType from '../types/ColumnType';
 
@@ -68,11 +68,27 @@ const WorldMap: React.FC<WorldMapProps> = ({ column, endDate, onCountrySelect })
     onCountrySelect(countryName);
   };
 
+  const tooltipStyles: React.CSSProperties = {
+    position: 'absolute',
+    left: mousePosition.x,
+    top: mousePosition.y - 10,
+    pointerEvents: 'none' as 'none',
+    maxWidth: 250,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    color: '#fff',
+    borderRadius: 4,
+    padding: 5,
+    fontSize: '12px',
+    zIndex: 1000,
+  };
+
   return (
-    <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
-      <h2>COVID-19 World Map</h2>
+    <div style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
       {loading ? (
-        <p>Loading data...</p>
+        <div style={{ textAlign: 'center' }}>
+          <CircularProgress />
+          <p>Loading data...</p>
+        </div>
       ) : (
         <ComposableMap projectionConfig={{ scale: 200 }}>
           <Geographies geography={geoUrl}>
@@ -112,12 +128,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ column, endDate, onCountrySelect })
           open
           title={<Typography>{tooltipContent}</Typography>}
           placement="top"
-          style={{
-            position: 'absolute',
-            left: mousePosition.x + 15,
-            top: mousePosition.y + 15,
-            pointerEvents: 'none',
-          }}
+          style={tooltipStyles}
         >
           <div />
         </Tooltip>
