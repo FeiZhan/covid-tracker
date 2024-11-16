@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { TextField, MenuItem, Select, FormControl, InputLabel, CircularProgress, Button, FormHelperText, SelectChangeEvent } from '@mui/material';
+import { TextField, MenuItem, Select, FormControl, InputLabel, CircularProgress, Button, FormHelperText, Grid, SelectChangeEvent } from '@mui/material';
 import DataType from '../types/DataType';
 
 type FilterProps = {
@@ -82,55 +82,63 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
 
   return (
     <form onSubmit={handleFormSubmit} className="filter-form">
-      <FormControl fullWidth margin="normal" error={!!errorMessage}>
-        <InputLabel>Country</InputLabel>
-        <Select value={country} onChange={handleCountryChange} required>
-          {loading ? (
-            <MenuItem disabled>
-              <CircularProgress size={24} />
-            </MenuItem>
-          ) : countries.length === 0 ? (
-            <MenuItem disabled>No countries available</MenuItem>
-          ) : (
-            countries.map((countryName) => (
-              <MenuItem key={countryName} value={countryName}>
-                {countryName}
-              </MenuItem>
-            ))
-          )}
-        </Select>
-        {errorMessage && <FormHelperText>{errorMessage}</FormHelperText>}
-      </FormControl>
+      <Grid container spacing={0} alignItems="center">
+        <Grid item xs={12} sm={4}>
+          <FormControl fullWidth margin="normal" error={!!errorMessage}>
+            <InputLabel>Country</InputLabel>
+            <Select value={country} onChange={handleCountryChange} required>
+              {loading ? (
+                <MenuItem disabled>
+                  <CircularProgress size={24} />
+                </MenuItem>
+              ) : countries.length === 0 ? (
+                <MenuItem disabled>No countries available</MenuItem>
+              ) : (
+                countries.map((countryName) => (
+                  <MenuItem key={countryName} value={countryName}>
+                    {countryName}
+                  </MenuItem>
+                ))
+              )}
+            </Select>
+            {errorMessage && <FormHelperText>{errorMessage}</FormHelperText>}
+          </FormControl>
+        </Grid>
 
-      <TextField
-        label="Start Date"
-        type="date"
-        value={startDate}
-        onChange={handleStartDateChange}
-        fullWidth
-        InputLabelProps={{ shrink: true }}
-        margin="normal"
-        required
-        error={!!errorMessage}
-      />
+        <Grid item xs={12} sm={3}>
+          <TextField
+            label="Start Date"
+            type="date"
+            value={startDate}
+            onChange={handleStartDateChange}
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            margin="normal"
+            required
+            error={!!errorMessage}
+          />
+        </Grid>
 
-      <TextField
-        label="End Date"
-        type="date"
-        value={endDate}
-        onChange={handleEndDateChange}
-        fullWidth
-        InputLabelProps={{ shrink: true }}
-        margin="normal"
-        required
-        error={!!errorMessage}
-      />
+        <Grid item xs={12} sm={3}>
+          <TextField
+            label="End Date"
+            type="date"
+            value={endDate}
+            onChange={handleEndDateChange}
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            margin="normal"
+            required
+            error={!!errorMessage}
+          />
+        </Grid>
 
-      <div>
-        <Button variant="contained" type="submit" color="primary">
-          Submit
-        </Button>
-      </div>
+        <Grid item xs={6} sm={1}>
+          <Button variant="contained" type="submit" color="primary" fullWidth>
+            Submit
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };
