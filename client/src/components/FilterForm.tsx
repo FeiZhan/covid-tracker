@@ -19,34 +19,47 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
   const [startDate, setStartDate] = useState(filters.startDate);
   const [endDate, setEndDate] = useState(filters.endDate);
 
-  // Sync state with incoming props when filters change
+  // Sync state with incoming filters when they change
   useEffect(() => {
     setCountry(filters.country);
-    //setStartDate(filters.startDate);
-    //setEndDate(filters.endDate);
+    setStartDate(filters.startDate); // Fix: update startDate on filter change
+    setEndDate(filters.endDate); // Fix: update endDate on filter change
   }, [filters]);
 
+  // Validate the date format (optional but recommended)
+  const validateDate = (date: string) => {
+    return date && !isNaN(Date.parse(date)); // Simple date validation
+  };
+
   const handleSubmit = () => {
-    onFilterSubmit({ country, startDate, endDate });
+    // Handle submit only if dates are valid
+    if (validateDate(startDate) && validateDate(endDate)) {
+      onFilterSubmit({ country, startDate, endDate });
+    } else {
+      console.error("Invalid date format");
+    }
   };
 
   const handleCountryChange = (event: SelectChangeEvent<string>) => {
     setCountry(event.target.value);
-    handleSubmit(); // Update immediately when country changes
   };
 
   const handleStartDateChange = (event: ChangeEvent<HTMLInputElement>) => {
     setStartDate(event.target.value);
-    handleSubmit(); // Update immediately when start date changes
   };
 
   const handleEndDateChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEndDate(event.target.value);
-    handleSubmit(); // Update immediately when end date changes
+  };
+
+  // Handle submit on form submission, not on every change
+  const handleFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    handleSubmit();
   };
 
   return (
-    <div className="filter-form">
+    <form onSubmit={handleFormSubmit} className="filter-form">
       <FormControl fullWidth margin="normal">
         <InputLabel>Country</InputLabel>
         <Select value={country} onChange={handleCountryChange}>
@@ -64,8 +77,9 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
         fullWidth
         InputLabelProps={{ shrink: true }}
         margin="normal"
+        required
       />
-      
+
       <TextField
         label="End Date"
         type="date"
@@ -74,8 +88,11 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
         fullWidth
         InputLabelProps={{ shrink: true }}
         margin="normal"
+        required
       />
-    </div>
+
+      <button type="submit">Submit</button>
+    </form>
   );
 };
 
