@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ColumnType from '../types/ColumnType';
 import DataType from '../types/DataType';
 import ChartType from '../types/ChartType';
@@ -39,38 +28,44 @@ const DataChart: React.FC<DataChartProps> = ({ data1, data2, chartType, selected
   const chartData1 = transformData(data1);
   const chartData2 = data2 ? transformData(data2) : [];
 
+  const allDates = [
+    ...chartData1.map((item) => item.name),
+    ...chartData2.map((item) => item.name),
+  ];
+
+  const uniqueDates = Array.from(new Set(allDates)).sort(
+    (a, b) => new Date(a).getTime() - new Date(b).getTime()
+  );
+
+  const fillMissingData = (data: { name: string; value: number }[]) => {
+    const dataMap = new Map(data.map((item) => [item.name, item]));
+    return uniqueDates.map((date) => {
+      const item = dataMap.get(date);
+      return item ? item : { name: date, value: 0 };
+    });
+  };
+
+  const filledChartData1 = fillMissingData(chartData1);
+  const filledChartData2 = fillMissingData(chartData2);
+
   const maxValue = Math.max(
-    ...chartData1.map((d) => d.value),
-    ...(chartData2.length > 0 ? chartData2.map((d) => d.value) : [0])
+    Math.max(...filledChartData1.map((item) => item.value)),
+    Math.max(...filledChartData2.map((item) => item.value))
   );
 
   switch (chartType) {
     case ChartType.LINE:
       return (
         <ResponsiveContainer width="100%" height={400}>
-          <LineChart>
+          <LineChart data={filledChartData1}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis domain={[0, Math.ceil(maxValue * 1.1)]} />
+            <YAxis domain={[0, maxValue]} />
             <Tooltip />
             <Legend />
-            <Line
-              type="monotone"
-              dataKey="value"
-              data={chartData1}
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
-              name="Data"
-            />
+            <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} name="Data" />
             {isComparison && (
-              <Line
-                type="monotone"
-                dataKey="value"
-                data={chartData2}
-                stroke="#82ca9d"
-                activeDot={{ r: 8 }}
-                name="Comparison"
-              />
+              <Line type="monotone" data={filledChartData2} dataKey="value" stroke="#82ca9d" activeDot={{ r: 8 }} name="Comparison" />
             )}
           </LineChart>
         </ResponsiveContainer>
@@ -78,16 +73,14 @@ const DataChart: React.FC<DataChartProps> = ({ data1, data2, chartType, selected
     case ChartType.BAR:
       return (
         <ResponsiveContainer width="100%" height={400}>
-          <BarChart>
+          <BarChart data={filledChartData1}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis domain={[0, Math.ceil(maxValue * 1.1)]} />
+            <YAxis domain={[0, maxValue]} />
             <Tooltip />
             <Legend />
-            <Bar dataKey="value" data={chartData1} fill="#8884d8" name="Data" />
-            {isComparison && (
-              <Bar dataKey="value" data={chartData2} fill="#82ca9d" name="Comparison" />
-            )}
+            <Bar dataKey="value" fill="#8884d8" name="Data" />
+            {isComparison && <Bar data={filledChartData2} dataKey="value" fill="#82ca9d" name="Comparison" />}
           </BarChart>
         </ResponsiveContainer>
       );
