@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
 import { Tooltip, Typography } from '@mui/material';
@@ -19,7 +19,7 @@ interface WorldMapProps {
 
 const WorldMap: React.FC<WorldMapProps> = ({ column, endDate, onCountrySelect }) => {
   const [countryData, setCountryData] = useState<{ [key: string]: number }>({});
-  const [tooltipContent, setTooltipContent] = useState("");
+  const [tooltipContent, setTooltipContent] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [loading, setLoading] = useState(false);
 
@@ -51,13 +51,16 @@ const WorldMap: React.FC<WorldMapProps> = ({ column, endDate, onCountrySelect })
     }
   }, [column, endDate]);
 
-  const handleMouseEnter = (event: React.MouseEvent, countryData: any) => {
+  const handleMouseEnter = (
+    event: React.MouseEvent<SVGPathElement, MouseEvent>,
+    countryData: { iso_code: string; [key: string]: any; location: string }
+  ) => {
     setTooltipContent(`Country: ${countryData.location}, ${column}: ${countryData[column]}`);
     setMousePosition({ x: event.clientX, y: event.clientY });
   };
 
   const handleMouseLeave = () => {
-    setTooltipContent(""); // Clear tooltip content
+    setTooltipContent(null); // Clear tooltip content
   };
 
   const handleCountryClick = (countryName: string) => {
@@ -82,7 +85,11 @@ const WorldMap: React.FC<WorldMapProps> = ({ column, endDate, onCountrySelect })
                     geography={geo}
                     fill={colorScale(value)}
                     onMouseEnter={(event) =>
-                      handleMouseEnter(event, { iso_code: isoCode, [column]: value, location: geo.properties.name })
+                      handleMouseEnter(event, {
+                        iso_code: isoCode,
+                        [column]: value,
+                        location: geo.properties.name,
+                      })
                     }
                     onMouseLeave={handleMouseLeave}
                     onClick={() => handleCountryClick(geo.properties.name)} // Drill-down with filter update
@@ -99,18 +106,21 @@ const WorldMap: React.FC<WorldMapProps> = ({ column, endDate, onCountrySelect })
         </ComposableMap>
       )}
 
-      <Tooltip
-        open={!!tooltipContent}
-        title={<Typography>{tooltipContent}</Typography>}
-        placement="top"
-        style={{
-          position: 'absolute',
-          left: mousePosition.x + 15,
-          top: mousePosition.y + 15,
-        }}
-      >
-        <div />
-      </Tooltip>
+      {tooltipContent && (
+        <Tooltip
+          open
+          title={<Typography>{tooltipContent}</Typography>}
+          placement="top"
+          style={{
+            position: 'absolute',
+            left: mousePosition.x + 15,
+            top: mousePosition.y + 15,
+            pointerEvents: 'none',
+          }}
+        >
+          <div />
+        </Tooltip>
+      )}
     </div>
   );
 };
