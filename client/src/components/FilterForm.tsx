@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { TextField, MenuItem, Select, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
+import DataType from '../types/DataType';
 
 type FilterProps = {
   filters: {
@@ -18,12 +19,35 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
   const [country, setCountry] = useState(filters.country);
   const [startDate, setStartDate] = useState(filters.startDate);
   const [endDate, setEndDate] = useState(filters.endDate);
+  const [countries, setCountries] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setCountry(filters.country);
     setStartDate(filters.startDate);
     setEndDate(filters.endDate);
   }, [filters]);
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`http://localhost:5000/api/covid?column=location&endDate=2020-01-05`);
+        if (!response.ok) {
+          throw new Error('Error fetching countries');
+        }
+        const data = await response.json();
+        const countrySet = new Set<string>(data.map((item: DataType) => item.location));
+        setCountries(Array.from(countrySet));
+      } catch (error) {
+        console.error('Failed to fetch countries:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCountries();
+  }, []);
 
   const validateDate = (date: string) => {
     return date && !isNaN(Date.parse(date)); // Simple date validation
@@ -59,9 +83,15 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
       <FormControl fullWidth margin="normal">
         <InputLabel>Country</InputLabel>
         <Select value={country} onChange={handleCountryChange}>
-          <MenuItem value="Afghanistan">Afghanistan</MenuItem>
-          <MenuItem value="USA">USA</MenuItem>
-          <MenuItem value="India">India</MenuItem>
+          {loading ? (
+            <MenuItem disabled>Loading countries...</MenuItem>
+          ) : (
+            countries.map((countryName) => (
+              <MenuItem key={countryName} value={countryName}>
+                {countryName}
+              </MenuItem>
+            ))
+          )}
         </Select>
       </FormControl>
 

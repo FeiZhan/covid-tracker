@@ -18,12 +18,12 @@ export const defaultFilter: Filter = {
   baselineFilter: {
     country: 'Afghanistan',
     startDate: '2020-01-01',
-    endDate: '2020-12-31',
+    endDate: '2020-01-31',
   },
   comparisonFilter: {
-    country: 'India',
+    country: 'Afghanistan',
     startDate: '2020-01-01',
-    endDate: '2020-12-31',
+    endDate: '2020-01-31',
   },
   chartType: ChartType.LINE,
   column: ColumnType.total_cases,
