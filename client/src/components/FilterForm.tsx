@@ -19,20 +19,17 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
   const [startDate, setStartDate] = useState(filters.startDate);
   const [endDate, setEndDate] = useState(filters.endDate);
 
-  // Sync state with incoming filters when they change
   useEffect(() => {
     setCountry(filters.country);
-    setStartDate(filters.startDate); // Fix: update startDate on filter change
-    setEndDate(filters.endDate); // Fix: update endDate on filter change
+    setStartDate(filters.startDate);
+    setEndDate(filters.endDate);
   }, [filters]);
 
-  // Validate the date format (optional but recommended)
   const validateDate = (date: string) => {
     return date && !isNaN(Date.parse(date)); // Simple date validation
   };
 
   const handleSubmit = () => {
-    // Handle submit only if dates are valid
     if (validateDate(startDate) && validateDate(endDate)) {
       onFilterSubmit({ country, startDate, endDate });
     } else {
@@ -52,7 +49,6 @@ const FilterForm: React.FC<FilterProps> = ({ filters, onFilterSubmit }) => {
     setEndDate(event.target.value);
   };
 
-  // Handle submit on form submission, not on every change
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     handleSubmit();

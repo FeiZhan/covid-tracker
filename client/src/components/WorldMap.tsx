@@ -12,9 +12,9 @@ const geoUrl =
   "https://raw.githubusercontent.com/subyfly/topojson/master/world-countries.json";
 
 interface WorldMapProps {
-  column: string; // The column parameter is used instead of country
-  endDate: string; // The endDate parameter is now required
-  onCountrySelect: (countryName: string) => void; // Callback to update the filter
+  column: string;
+  endDate: string;
+  onCountrySelect: (countryName: string) => void;
 }
 
 const WorldMap: React.FC<WorldMapProps> = ({ column, endDate, onCountrySelect }) => {
@@ -60,11 +60,11 @@ const WorldMap: React.FC<WorldMapProps> = ({ column, endDate, onCountrySelect })
   };
 
   const handleMouseLeave = () => {
-    setTooltipContent(null); // Clear tooltip content
+    setTooltipContent(null);
   };
 
   const handleCountryClick = (countryName: string) => {
-    onCountrySelect(countryName); // Update filter with selected country name
+    onCountrySelect(countryName);
   };
 
   return (
@@ -92,7 +92,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ column, endDate, onCountrySelect })
                       })
                     }
                     onMouseLeave={handleMouseLeave}
-                    onClick={() => handleCountryClick(geo.properties.name)} // Drill-down with filter update
+                    onClick={() => handleCountryClick(geo.properties.name)}
                     style={{
                       default: { outline: 'none' },
                       hover: { fill: '#FF5722', outline: 'none' },
