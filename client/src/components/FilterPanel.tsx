@@ -41,45 +41,37 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange }) =>
     <div>
       <h3>Filters</h3>
 
-      {/* Column Selection */}
       <div className="column-selection">
-        <label>
-          Select Column:
-          <select value={filters.column} onChange={handleColumnChange}>
-            {Object.values(ColumnType).map((column) => (
-              <option key={column} value={column}>
-                {column}
-              </option>
-            ))}
-          </select>
-        </label>
+        <label htmlFor="column-select">Select Column:</label>
+        <select id="column-select" value={filters.column} onChange={handleColumnChange}>
+          {(Object.values(ColumnType) as ColumnType[]).map((column) => (
+            <option key={column} value={column}>
+              {column}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {/* Baseline Filters */}
       <CovidFilterForm
-        filters={filters.baselineFilter || { country: '', startDate: '', endDate: '' }}
+        filters={filters.baselineFilter ?? { country: '', startDate: '', endDate: '' }}
         onFilterSubmit={handleBaselineFilterChange}
       />
 
       <h3>Comparison Filters</h3>
-      {/* Comparison Filters */}
       <CovidFilterForm
-        filters={filters.comparisonFilter || { country: '', startDate: '', endDate: '' }}
+        filters={filters.comparisonFilter ?? { country: '', startDate: '', endDate: '' }}
         onFilterSubmit={handleComparisonFilterChange}
       />
 
-      {/* Chart Type Selection */}
       <div className="chart-type-selection">
-        <label>
-          Chart Type:
-          <select value={filters.chartType} onChange={handleChartTypeChange}>
-            {Object.values(ChartType).map((chart) => (
-              <option key={chart} value={chart}>
-                {chart}
-              </option>
-            ))}
-          </select>
-        </label>
+        <label htmlFor="chart-type-select">Chart Type:</label>
+        <select id="chart-type-select" value={filters.chartType} onChange={handleChartTypeChange}>
+          {(Object.values(ChartType) as ChartType[]).map((chart) => (
+            <option key={chart} value={chart}>
+              {chart}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
